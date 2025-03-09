@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit a Support Ticket{% endblock %}
+
+{% block content %}
+<h2>Submit a Support Ticket</h2>
+<form method="POST">
+    <label for="category">Select Category:</label>
+    <select name="category" required>
+        <option value="Email Support">Email Support</option>
+        <option value="Website Support">Website Support</option>
+        <option value="Access Support">Access Support</option>
+        <option value="QuickBooks Support">QuickBooks Support</option>
+        <option value="Social Media Post">Social Media Post</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="description">Describe Your Issue:</label>
+    <textarea name="description" rows="4" required></textarea>
+
+    <button type="submit">Submit Ticket</button>
+</form>
+{% endblock %}

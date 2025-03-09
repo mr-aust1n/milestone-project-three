@@ -92,6 +92,22 @@ def logout():
     flash('Logged out successfully.', 'info')
     return redirect(url_for('index'))
 
+@app.route('/submit_ticket', methods=['GET', 'POST'])
+@login_required
+def submit_ticket():
+    if request.method == 'POST':
+        category = request.form['category']
+        description = request.form['description']
+
+        new_ticket = Ticket(user_id=current_user.id, category=category, description=description)
+        db.session.add(new_ticket)
+        db.session.commit()
+
+        flash('Your support ticket has been submitted!', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('submit_ticket.html')
+
 with app.app_context():
     db.create_all()
 
