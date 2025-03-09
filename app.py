@@ -19,6 +19,7 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)  # Admin column
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -147,6 +148,16 @@ def mark_done(ticket_id):
     flash("Ticket marked as Done!", "success")
     
     return redirect(url_for('view_tickets'))
+
+@app.route('/admin/tickets')
+@login_required
+def admin_tickets():
+    if not current_user.is_admin:
+        flash("Access Denied: Admins only.", "danger")
+        return redirect(url_for('index'))
+
+    all_tickets = Ticket.query.all()
+    return render_template('admin_tickets.html', tickets=all_tickets)
 
 with app.app_context():
     db.create_all()
