@@ -108,6 +108,13 @@ def submit_ticket():
 
     return render_template('submit_ticket.html')
 
+@app.route('/tickets')
+@login_required
+def view_tickets():
+    if current_user.is_authenticated:
+        user_tickets = Ticket.query.filter_by(user_id=current_user.id).all()
+        return render_template('tickets.html', tickets=user_tickets)
+
 with app.app_context():
     db.create_all()
 
