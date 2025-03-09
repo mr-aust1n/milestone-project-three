@@ -133,6 +133,21 @@ def edit_ticket(ticket_id):
 
     return render_template('edit_ticket.html', ticket=ticket)
 
+@app.route('/mark_done/<int:ticket_id>')
+@login_required
+def mark_done(ticket_id):
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    if ticket.user_id != current_user.id:
+        flash("You don't have permission to update this ticket.", "danger")
+        return redirect(url_for('view_tickets'))
+
+    ticket.status = "Done"
+    db.session.commit()
+    flash("Ticket marked as Done!", "success")
+    
+    return redirect(url_for('view_tickets'))
+
 with app.app_context():
     db.create_all()
 
