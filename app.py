@@ -115,6 +115,24 @@ def view_tickets():
         user_tickets = Ticket.query.filter_by(user_id=current_user.id).all()
         return render_template('tickets.html', tickets=user_tickets)
 
+@app.route('/edit_ticket/<int:ticket_id>', methods=['GET', 'POST'])
+@login_required
+def edit_ticket(ticket_id):
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    if ticket.user_id != current_user.id:
+        flash("You don't have permission to edit this ticket.", "danger")
+        return redirect(url_for('view_tickets'))
+
+    if request.method == 'POST':
+        ticket.category = request.form['category']
+        ticket.description = request.form['description']
+        db.session.commit()
+        flash("Ticket updated successfully!", "success")
+        return redirect(url_for('view_tickets'))
+
+    return render_template('edit_ticket.html', ticket=ticket)
+
 with app.app_context():
     db.create_all()
 
