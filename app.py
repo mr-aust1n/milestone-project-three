@@ -53,21 +53,25 @@ def register():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
+
         existing_user = User.query.filter_by(email=email).first()
-        
         if existing_user:
             flash('Email already registered.', 'danger')
             return redirect(url_for('register'))
-        
+
+        if len(password) < 8:
+            flash('Password must be at least 8 characters long.', 'warning')
+            return redirect(url_for('register'))
+
         new_user = User(email=email)
         new_user.set_password(password)
         db.session.add(new_user)
         db.session.commit()
         login_user(new_user)
-        
-        flash('Registration successful!', 'success')
+
+        flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('index'))
-    
+
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -112,9 +116,8 @@ def submit_ticket():
 @app.route('/tickets')
 @login_required
 def view_tickets():
-    if current_user.is_authenticated:
-        user_tickets = Ticket.query.filter_by(user_id=current_user.id).all()
-        return render_template('tickets.html', tickets=user_tickets)
+    user_tickets = Ticket.query.filter_by(user_id=current_user.id).all()
+    return render_template('tickets.html', tickets=user_tickets)
 
 @app.route('/edit_ticket/<int:ticket_id>', methods=['GET', 'POST'])
 @login_required
