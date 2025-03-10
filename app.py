@@ -54,11 +54,13 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
+        # Validate if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email already registered.', 'danger')
             return redirect(url_for('register'))
 
+        # Enforce Strong Password Policy
         if len(password) < 8:
             flash('Password must be at least 8 characters long.', 'warning')
             return redirect(url_for('register'))
@@ -87,7 +89,7 @@ def login():
             return redirect(url_for('index'))
         else:
             flash('Invalid email or password.', 'danger')
-    
+
     return render_template('login.html')
 
 @app.route('/logout')
@@ -142,8 +144,9 @@ def edit_ticket(ticket_id):
 def mark_done(ticket_id):
     ticket = Ticket.query.get_or_404(ticket_id)
 
-    if ticket.user_id != current_user.id:
-        flash("You don't have permission to update this ticket.", "danger")
+    # Only allow admins to mark tickets as Done
+    if not current_user.is_admin:
+        flash("You don't have permission to mark this ticket as done.", "danger")
         return redirect(url_for('view_tickets'))
 
     ticket.status = "Done"
