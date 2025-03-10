@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}All Support Tickets{% endblock %}
+{% block title %}All Support Tickets (Admin Panel){% endblock %}
 
 {% block content %}
-<h2>All Support Tickets (Admin View)</h2>
+<h2>All Support Tickets</h2>
 {% if tickets %}
 <table class="table">
     <thead>
@@ -13,6 +13,7 @@
             <th>Category</th>
             <th>Description</th>
             <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +24,12 @@
             <td>{{ ticket.category }}</td>
             <td>{{ ticket.description }}</td>
             <td>{{ ticket.status }}</td>
+            <td>
+                {% if current_user.is_admin and ticket.status != "Done" %}
+                <a href="{{ url_for('mark_done', ticket_id=ticket.id) }}" class="btn btn-success btn-sm">Mark as
+                    Done</a>
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
