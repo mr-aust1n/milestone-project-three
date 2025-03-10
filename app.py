@@ -133,7 +133,7 @@ def view_tickets():
     if status_filter:
         tickets_query = tickets_query.filter_by(status=status_filter)
 
-    # Pagination setup for users
+    # Pagination setup for users only
     page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
     per_page = 5  # Show 5 tickets per page for users admin get 10 See below.
     total = tickets_query.count()
