@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, flash, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
+from flask_paginate import Pagination, get_page_args
 from dotenv import load_dotenv
 import os
 
@@ -115,11 +116,32 @@ def submit_ticket():
 
     return render_template('submit_ticket.html')
 
-@app.route('/tickets')
+@app.route('/tickets', methods=['GET'])
 @login_required
 def view_tickets():
-    user_tickets = Ticket.query.filter_by(user_id=current_user.id).all()
-    return render_template('tickets.html', tickets=user_tickets)
+    search_query = request.args.get('search', '')
+    status_filter = request.args.get('status_filter', '')
+
+    tickets_query = Ticket.query.filter_by(user_id=current_user.id)
+
+    if search_query:
+        tickets_query = tickets_query.filter(
+            Ticket.category.ilike(f"%{search_query}%") |
+            Ticket.description.ilike(f"%{search_query}%")
+        )
+
+    if status_filter:
+        tickets_query = tickets_query.filter_by(status=status_filter)
+
+    # Pagination setup for users
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    per_page = 5  # Show 5 tickets per page for users admin get 10 See below.
+    total = tickets_query.count()
+    tickets = tickets_query.offset(offset).limit(per_page).all()
+
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    return render_template('tickets.html', tickets=tickets, pagination=pagination)
 
 @app.route('/edit_ticket/<int:ticket_id>', methods=['GET', 'POST'])
 @login_required
@@ -155,15 +177,36 @@ def mark_done(ticket_id):
     
     return redirect(url_for('view_tickets'))
 
-@app.route('/admin/tickets')
+@app.route('/admin/tickets', methods=['GET'])
 @login_required
 def admin_tickets():
     if not current_user.is_admin:
         flash("Access Denied: Admins only.", "danger")
         return redirect(url_for('index'))
 
-    all_tickets = Ticket.query.all()
-    return render_template('admin_tickets.html', tickets=all_tickets)
+    search_query = request.args.get('search', '')
+    status_filter = request.args.get('status_filter', '')
+
+    tickets_query = Ticket.query
+
+    if search_query:
+        tickets_query = tickets_query.filter(
+            Ticket.category.ilike(f"%{search_query}%") |
+            Ticket.description.ilike(f"%{search_query}%")
+        )
+
+    if status_filter:
+        tickets_query = tickets_query.filter_by(status=status_filter)
+
+    # Pagination setup for admins
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    per_page = 10  # Show 10 tickets per page for admins only
+    total = tickets_query.count()
+    tickets = tickets_query.offset(offset).limit(per_page).all()
+
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    return render_template('admin_tickets.html', tickets=tickets, pagination=pagination)
 
 with app.app_context():
     db.create_all()
