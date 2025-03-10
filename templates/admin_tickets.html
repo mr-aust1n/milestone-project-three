@@ -5,6 +5,22 @@
 {% block content %}
 <h2>All Support Tickets</h2>
 {% if tickets %}
+
+<form method="GET" action="{{ url_for('admin_tickets') }}" class="mb-3">
+    <input type="text" name="search" placeholder="Search tickets..." class="form-control"
+        value="{{ request.args.get('search', '') }}">
+
+    <select name="status_filter" class="form-control mt-2">
+        <option value="">All Statuses</option>
+        <option value="Submitted" {% if request.args.get('status_filter')=="Submitted" %}selected{% endif %}>Submitted
+        </option>
+        <option value="Done" {% if request.args.get('status_filter')=="Done" %}selected{% endif %}>Done</option>
+    </select>
+
+    <button type="submit" class="btn btn-primary mt-2">Search</button>
+</form>
+
+
 <table class="table">
     <thead>
         <tr>
@@ -34,6 +50,11 @@
         {% endfor %}
     </tbody>
 </table>
+
+<div class="pagination-container">
+    {{ pagination.links }}
+</div>
+
 {% else %}
 <p>No support tickets found.</p>
 {% endif %}
