@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from flask_paginate import Pagination, get_page_args
+import requests
 from dotenv import load_dotenv
 import os
 
@@ -16,11 +17,28 @@ bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
+MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN")
+MAILGUN_SENDER = os.getenv("MAILGUN_SENDER")
+
+def send_email(to, subject, body):
+    """ Sends an email using Mailgun API """
+    return requests.post(
+        f"https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages",
+        auth=("api", MAILGUN_API_KEY),
+        data={
+            "from": f"Support System <{MAILGUN_SENDER}>",
+            "to": to,
+            "subject": subject,
+            "text": body,
+        }
+    )
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)  # Admin column
+    is_admin = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -55,13 +73,11 @@ def register():
         email = request.form['email']
         password = request.form['password']
 
-        # Validate if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash('Email already registered.', 'danger')
             return redirect(url_for('register'))
 
-        # Enforce Strong Password Policy
         if len(password) < 8:
             flash('Password must be at least 8 characters long.', 'warning')
             return redirect(url_for('register'))
@@ -72,7 +88,14 @@ def register():
         db.session.commit()
         login_user(new_user)
 
-        flash('Registration successful! Please log in.', 'success')
+        # Send welcome email
+        send_email(
+            email,
+            "Welcome to the Support System",
+            f"Hello {email},\n\nYour account has been successfully created.\n\nThanks,\nSupport Team"
+        )
+
+        flash('Registration successful! Please check your email.', 'success')
         return redirect(url_for('index'))
 
     return render_template('register.html')
@@ -111,6 +134,24 @@ def submit_ticket():
         db.session.add(new_ticket)
         db.session.commit()
 
+        # Define which admin(s) should receive ticket notifications from our website tickets
+        category_admins = {
+            "Email Support": ["emails@craigaust.in"],
+            "Website Support": ["web@craigaust.in"],
+            "Access Support": ["access@craigaust.in"],
+            "QuickBooks Support": ["quickbooks@craigaust.in"],
+            "Social Media Post": ["socials@craigaust.in"],
+            "Other": ["misc@craigaust.in"]
+        }
+
+        assigned_admin_emails = category_admins.get(category, ["default_admin@craigaust.in"])
+
+        send_email(
+            assigned_admin_emails,
+            "New Support Ticket Assigned",
+            f"A new ticket has been submitted in your category:\n\nCategory: {category}\nDescription: {description}\n\nPlease log in to view the ticket."
+        )
+
         flash('Your support ticket has been submitted!', 'success')
         return redirect(url_for('index'))
 
@@ -133,9 +174,8 @@ def view_tickets():
     if status_filter:
         tickets_query = tickets_query.filter_by(status=status_filter)
 
-    # Pagination setup for users only
     page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
-    per_page = 5  # Show 5 tickets per page for users admin get 10 See below.
+    per_page = 5
     total = tickets_query.count()
     tickets = tickets_query.offset(offset).limit(per_page).all()
 
@@ -143,30 +183,11 @@ def view_tickets():
 
     return render_template('tickets.html', tickets=tickets, pagination=pagination)
 
-@app.route('/edit_ticket/<int:ticket_id>', methods=['GET', 'POST'])
-@login_required
-def edit_ticket(ticket_id):
-    ticket = Ticket.query.get_or_404(ticket_id)
-
-    if ticket.user_id != current_user.id:
-        flash("You don't have permission to edit this ticket.", "danger")
-        return redirect(url_for('view_tickets'))
-
-    if request.method == 'POST':
-        ticket.category = request.form['category']
-        ticket.description = request.form['description']
-        db.session.commit()
-        flash("Ticket updated successfully!", "success")
-        return redirect(url_for('view_tickets'))
-
-    return render_template('edit_ticket.html', ticket=ticket)
-
 @app.route('/mark_done/<int:ticket_id>')
 @login_required
 def mark_done(ticket_id):
     ticket = Ticket.query.get_or_404(ticket_id)
 
-    # Only allow admins to mark tickets as Done
     if not current_user.is_admin:
         flash("You don't have permission to mark this ticket as done.", "danger")
         return redirect(url_for('view_tickets'))
@@ -198,9 +219,8 @@ def admin_tickets():
     if status_filter:
         tickets_query = tickets_query.filter_by(status=status_filter)
 
-    # Pagination setup for admins
     page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
-    per_page = 10  # Show 10 tickets per page for admins only
+    per_page = 10
     total = tickets_query.count()
     tickets = tickets_query.offset(offset).limit(per_page).all()
 
