@@ -2,4 +2,3 @@
 __pycache__/
 instance/
 support_db.db
-.env
