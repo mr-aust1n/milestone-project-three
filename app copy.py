@@ -53,11 +53,6 @@ class Ticket(db.Model):
     description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(20), default='Submitted')
 
-    # --- Admin Questions and User Responses ---
-    admin_question = db.Column(db.Text, nullable=True)  # Admin’s question to user
-    user_response = db.Column(db.Text, nullable=True)  # User’s reply to admin
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-
     user = db.relationship('User', backref=db.backref('tickets', lazy=True))
 
 @login_manager.user_loader
@@ -105,6 +100,29 @@ def register():
 
     return render_template('register.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+
+        if user and user.check_password(password):
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid email or password.', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out successfully.', 'info')
+    return redirect(url_for('index'))
+
 @app.route('/submit_ticket', methods=['GET', 'POST'])
 @login_required
 def submit_ticket():
@@ -116,7 +134,7 @@ def submit_ticket():
         db.session.add(new_ticket)
         db.session.commit()
 
-        # Define which admin(s) should receive ticket notifications from our website 
+        # Define which admin(s) should receive ticket notifications from our website
         category_admins = {
             "Email Support": ["emails@craigaust.in"],
             "Website Support": ["web@craigaust.in"],
@@ -139,56 +157,76 @@ def submit_ticket():
 
     return render_template('submit_ticket.html')
 
-@app.route('/admin/question/<int:ticket_id>', methods=['POST'])
+@app.route('/tickets', methods=['GET'])
 @login_required
-def admin_question(ticket_id):
-    if not current_user.is_admin:
-        flash("Access Denied.", "danger")
-        return redirect(url_for('admin_tickets'))
+def view_tickets():
+    search_query = request.args.get('search', '')
+    status_filter = request.args.get('status_filter', '')
 
-    ticket = Ticket.query.get_or_404(ticket_id)
-    question = request.form.get('question')
+    tickets_query = Ticket.query.filter_by(user_id=current_user.id)
 
-    if question:
-        ticket.admin_question = question
-        ticket.status = "In Progress"
-        db.session.commit()
-
-        # Notify user
-        send_email(
-            ticket.user.email,
-            "New Question from Admin",
-            f"An admin has asked you a question regarding your support ticket:\n\n{question}\n\nPlease log in to reply."
+    if search_query:
+        tickets_query = tickets_query.filter(
+            Ticket.category.ilike(f"%{search_query}%") |
+            Ticket.description.ilike(f"%{search_query}%")
         )
 
-        flash("Question sent to user.", "success")
+    if status_filter:
+        tickets_query = tickets_query.filter_by(status=status_filter)
 
-    return redirect(url_for('admin_tickets'))
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    per_page = 5
+    total = tickets_query.count()
+    tickets = tickets_query.offset(offset).limit(per_page).all()
 
-@app.route('/user/response/<int:ticket_id>', methods=['POST'])
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    return render_template('tickets.html', tickets=tickets, pagination=pagination)
+
+@app.route('/mark_done/<int:ticket_id>')
 @login_required
-def user_response(ticket_id):
+def mark_done(ticket_id):
     ticket = Ticket.query.get_or_404(ticket_id)
 
-    if ticket.user_id != current_user.id:
-        flash("Access Denied.", "danger")
+    if not current_user.is_admin:
+        flash("You don't have permission to mark this ticket as done.", "danger")
         return redirect(url_for('view_tickets'))
 
-    response = request.form.get('response')
-    if response:
-        ticket.user_response = response
-        db.session.commit()
+    ticket.status = "Done"
+    db.session.commit()
+    flash("Ticket marked as Done!", "success")
+    
+    return redirect(url_for('view_tickets'))
 
-        # Notify admin
-        send_email(
-            "default_admin@craigaust.in",
-            "User Replied to Ticket",
-            f"The user has responded to your question:\n\n{response}\n\nPlease log in to continue the conversation."
+@app.route('/admin/tickets', methods=['GET'])
+@login_required
+def admin_tickets():
+    if not current_user.is_admin:
+        flash("Access Denied: Admins only.", "danger")
+        return redirect(url_for('index'))
+
+    search_query = request.args.get('search', '')
+    status_filter = request.args.get('status_filter', '')
+
+    tickets_query = Ticket.query
+
+    if search_query:
+        tickets_query = tickets_query.filter(
+            Ticket.category.ilike(f"%{search_query}%") |
+            Ticket.description.ilike(f"%{search_query}%")
         )
 
-        flash("Response sent to admin.", "success")
+    if status_filter:
+        tickets_query = tickets_query.filter_by(status=status_filter)
 
-    return redirect(url_for('view_tickets'))
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    per_page = 10
+    total = tickets_query.count()
+    tickets = tickets_query.offset(offset).limit(per_page).all()
+
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    return render_template('admin_tickets.html', tickets=tickets, pagination=pagination)
 
 with app.app_context():
     db.create_all()
