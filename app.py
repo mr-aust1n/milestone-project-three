@@ -53,11 +53,6 @@ class Ticket(db.Model):
     description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(20), default='Submitted')
 
-    # --- Admin Questions and User Responses ---
-    admin_question = db.Column(db.Text, nullable=True)  # Admin’s question to user
-    user_response = db.Column(db.Text, nullable=True)  # User’s reply to admin
-    updated_at = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
-
     user = db.relationship('User', backref=db.backref('tickets', lazy=True))
 
 @login_manager.user_loader
@@ -105,18 +100,47 @@ def register():
 
     return render_template('register.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        user = User.query.filter_by(email=email).first()
+
+        if user and user.check_password(password):
+            login_user(user)
+            flash('Login successful!', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid email or password.', 'danger')
+
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out successfully.', 'info')
+    return redirect(url_for('index'))
+
 @app.route('/submit_ticket', methods=['GET', 'POST'])
 @login_required
 def submit_ticket():
     if request.method == 'POST':
-        category = request.form['category']
-        description = request.form['description']
+        category = request.form.get('category')
+        description = request.form.get('description')
 
-        new_ticket = Ticket(user_id=current_user.id, category=category, description=description)
+        # Ensure category and description are not empty
+        if not category or not description.strip():
+            flash('Category and description are required.', 'danger')
+            return redirect(url_for('submit_ticket'))
+
+        # Create new ticket
+        new_ticket = Ticket(user_id=current_user.id, category=category, description=description, status="Submitted")
         db.session.add(new_ticket)
         db.session.commit()
 
-        # Define which admin(s) should receive ticket notifications from our website 
+        # Notify the correct admins
         category_admins = {
             "Email Support": ["emails@craigaust.in"],
             "Website Support": ["web@craigaust.in"],
@@ -131,64 +155,117 @@ def submit_ticket():
         send_email(
             assigned_admin_emails,
             "New Support Ticket Assigned",
-            f"A new ticket has been submitted in your category:\n\nCategory: {category}\nDescription: {description}\n\nPlease log in to view the ticket."
+            f"A new support ticket has been submitted:\n\n"
+            f"**Category:** {category}\n"
+            f"**Description:** {description}\n\n"
+            f"Please log in to view and respond to the ticket."
         )
 
-        flash('Your support ticket has been submitted!', 'success')
-        return redirect(url_for('index'))
-
-    return render_template('submit_ticket.html')
-
-@app.route('/admin/question/<int:ticket_id>', methods=['POST'])
-@login_required
-def admin_question(ticket_id):
-    if not current_user.is_admin:
-        flash("Access Denied.", "danger")
-        return redirect(url_for('admin_tickets'))
-
-    ticket = Ticket.query.get_or_404(ticket_id)
-    question = request.form.get('question')
-
-    if question:
-        ticket.admin_question = question
-        ticket.status = "In Progress"
-        db.session.commit()
-
-        # Notify user
-        send_email(
-            ticket.user.email,
-            "New Question from Admin",
-            f"An admin has asked you a question regarding your support ticket:\n\n{question}\n\nPlease log in to reply."
-        )
-
-        flash("Question sent to user.", "success")
-
-    return redirect(url_for('admin_tickets'))
-
-@app.route('/user/response/<int:ticket_id>', methods=['POST'])
-@login_required
-def user_response(ticket_id):
-    ticket = Ticket.query.get_or_404(ticket_id)
-
-    if ticket.user_id != current_user.id:
-        flash("Access Denied.", "danger")
+        flash('Your support ticket has been submitted successfully!', 'success')
         return redirect(url_for('view_tickets'))
 
-    response = request.form.get('response')
-    if response:
-        ticket.user_response = response
+    return render_template('submit_ticket.html')
+    
+
+@app.route('/edit_ticket/<int:ticket_id>', methods=['GET', 'POST'])
+@login_required
+def edit_ticket(ticket_id):
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    # Allow admins to edit any ticket, but users can only edit their own tickets
+    if not current_user.is_admin and ticket.user_id != current_user.id:
+        flash("Access Denied. You can only edit your own tickets.", "danger")
+        return redirect(url_for('view_tickets'))
+
+    if request.method == 'POST':
+        category = request.form.get('category')
+        description = request.form.get('description')
+
+        if not category or not description.strip():
+            flash('Category and description are required.', 'danger')
+            return redirect(url_for('edit_ticket', ticket_id=ticket.id))
+
+        ticket.category = category
+        ticket.description = description
         db.session.commit()
 
-        # Notify admin
-        send_email(
-            "default_admin@craigaust.in",
-            "User Replied to Ticket",
-            f"The user has responded to your question:\n\n{response}\n\nPlease log in to continue the conversation."
+        flash("Ticket updated successfully!", "success")
+        return redirect(url_for('view_tickets'))
+
+    return render_template('edit_ticket.html', ticket=ticket)
+
+
+
+@app.route('/tickets', methods=['GET'])
+@login_required
+def view_tickets():
+    search_query = request.args.get('search', '')
+    status_filter = request.args.get('status_filter', '')
+
+    tickets_query = Ticket.query.filter_by(user_id=current_user.id)
+
+    if search_query:
+        tickets_query = tickets_query.filter(
+            Ticket.category.ilike(f"%{search_query}%") |
+            Ticket.description.ilike(f"%{search_query}%")
         )
 
-        flash("Response sent to admin.", "success")
+    if status_filter:
+        tickets_query = tickets_query.filter_by(status=status_filter)
 
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    per_page = 5
+    total = tickets_query.count()
+    tickets = tickets_query.offset(offset).limit(per_page).all()
+
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    return render_template('tickets.html', tickets=tickets, pagination=pagination)
+
+@app.route('/mark_done/<int:ticket_id>')
+@login_required
+def mark_done(ticket_id):
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    if not current_user.is_admin:
+        flash("You don't have permission to mark this ticket as done.", "danger")
+        return redirect(url_for('view_tickets'))
+
+    ticket.status = "Done"
+    db.session.commit()
+    flash("Ticket marked as Done!", "success")
+    
     return redirect(url_for('view_tickets'))
+
+@app.route('/admin/tickets', methods=['GET'])
+@login_required
+def admin_tickets():
+    if not current_user.is_admin:
+        flash("Access Denied: Admins only.", "danger")
+        return redirect(url_for('index'))
+
+    search_query = request.args.get('search', '')
+    status_filter = request.args.get('status_filter', '')
+
+    tickets_query = Ticket.query
+
+    if search_query:
+        tickets_query = tickets_query.filter(
+            Ticket.category.ilike(f"%{search_query}%") |
+            Ticket.description.ilike(f"%{search_query}%")
+        )
+
+    if status_filter:
+        tickets_query = tickets_query.filter_by(status=status_filter)
+
+    page, per_page, offset = get_page_args(page_parameter='page', per_page_parameter='per_page')
+    per_page = 10
+    total = tickets_query.count()
+    tickets = tickets_query.offset(offset).limit(per_page).all()
+
+    pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    return render_template('admin_tickets.html', tickets=tickets, pagination=pagination)
 
 with app.app_context():
     db.create_all()
