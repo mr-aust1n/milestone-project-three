@@ -26,24 +26,25 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('about') }}">About</a>
                     </li>
+
                     {% if current_user.is_authenticated %}
+                    {% if current_user.is_admin %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('view_tickets') }}">My Tickets</a>
-                    </li>
-
-                    {% if current_user.is_admin %}
-                    <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('admin_tickets') }}">Admin Panel</a>
                     </li>
                     {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('view_tickets') }}">My Tickets</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('submit_ticket') }}">Submit Ticket</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>
                     {% else %}
                     <li class="nav-item">
@@ -53,8 +54,8 @@
                         <a class="nav-link" href="{{ url_for('register') }}">Sign Up</a>
                     </li>
                     {% endif %}
-
                 </ul>
+
             </div>
         </div>
     </nav>
