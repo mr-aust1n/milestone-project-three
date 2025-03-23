@@ -19,7 +19,8 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+                <!-- Left side nav -->
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('index') }}">Home</a>
                     </li>
@@ -28,21 +29,23 @@
                     </li>
 
                     {% if current_user.is_authenticated %}
-                    {% if current_user.is_admin %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('admin_tickets') }}">Admin Panel</a>
-                    </li>
-                    {% endif %}
-
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('view_tickets') }}">My Tickets</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('submit_ticket') }}">Submit Ticket</a>
                     </li>
+                    {% if current_user.is_admin %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+                </ul>
+
+                <!-- Right side nav -->
+                <ul class="navbar-nav ms-auto">
+                    {% if current_user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
                     </li>
@@ -55,8 +58,8 @@
                     </li>
                     {% endif %}
                 </ul>
-
             </div>
+
         </div>
     </nav>
     {% with messages = get_flashed_messages(with_categories=True) %}
