@@ -1,66 +1,11 @@
-{% extends 'base.html' %}
-
-{% block title %}All Support Tickets (Admin Panel){% endblock %}
-
-{% block content %}
-<h2>All Support Tickets</h2>
-{% if tickets %}
-
-<form method="GET" action="{{ url_for('admin_tickets') }}" class="mb-3">
-    <input type="text" name="search" placeholder="Search tickets..." class="form-control"
-        value="{{ request.args.get('search', '') }}">
-
-    <select name="status_filter" class="form-control mt-2">
-        <option value="">All Statuses</option>
-        <option value="Submitted" {% if request.args.get('status_filter')=="Submitted" %}selected{% endif %}>Submitted
-        </option>
-        <option value="Done" {% if request.args.get('status_filter')=="Done" %}selected{% endif %}>Done</option>
-    </select>
-
-    <button type="submit" class="btn btn-primary mt-2">Search</button>
-</form>
-
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>User</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ticket in tickets %}
-        <tr>
-            <td>{{ ticket.id }}</td>
-            <td>{{ ticket.user.email }}</td>
-            <td>{{ ticket.category }}</td>
-            <td>{{ ticket.description }}</td>
-            <td>{{ ticket.status }}</td>
-            <td>
-                {% if current_user.is_admin and ticket.status != "Done" %}
-                <a href="{{ url_for('mark_done', ticket_id=ticket.id) }}" class="btn btn-success btn-sm">Mark as
-                    Done</a>
-                {% endif %}
-            </td>
-            <form action="{{ url_for('delete_ticket', ticket_id=ticket.id) }}" method="POST" style="display:inline;"
-                onsubmit="return confirm('Are you sure you want to delete this ticket?');">
-                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-<div class="pagination-container">
-    {{ pagination.links }}
-</div>
-
-{% else %}
-<p>No support tickets found.</p>
-{% endif %}
-{% endblock %}
+<td>
+    {% if current_user.is_admin %}
+    {% if ticket.status != "Done" %}
+    <a href="{{ url_for('mark_done', ticket_id=ticket.id) }}" class="btn btn-success btn-sm">Mark as Done</a>
+    {% endif %}
+    <form action="{{ url_for('delete_ticket', ticket_id=ticket.id) }}" method="POST" style="display:inline;"
+        onsubmit="return confirm('Are you sure you want to delete this ticket?');">
+        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </form>
+    {% endif %}
+</td>
