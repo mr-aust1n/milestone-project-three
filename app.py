@@ -333,7 +333,7 @@ def dashboard():
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('index'))
 
-    # Query total tickets per category
+    # Total tickets per category
     data = db.session.query(
         Ticket.category,
         db.func.count(Ticket.id)
@@ -342,8 +342,35 @@ def dashboard():
     categories = [row[0] for row in data]
     counts = [row[1] for row in data]
 
-    return render_template('dashboard.html', categories=categories, counts=counts)
+    # Admin category mapping
+    category_admins = {
+        "Email Support": ["emails@craigaust.in"],
+        "Website Support": ["web@craigaust.in"],
+        "Access Support": ["access@craigaust.in"],
+        "QuickBooks Support": ["quickbooks@craigaust.in"],
+        "Social Media Post": ["socials@craigaust.in"],
+        "Other": ["misc@craigaust.in"]
+    }
 
+    # Admin ticket count
+    admin_totals = {}
+
+    all_tickets = Ticket.query.all()
+    for ticket in all_tickets:
+        admins = category_admins.get(ticket.category, ["default_admin@craigaust.in"])
+        for admin in admins:
+            admin_totals[admin] = admin_totals.get(admin, 0) + 1
+
+    admin_labels = list(admin_totals.keys())
+    admin_counts = list(admin_totals.values())
+
+    return render_template(
+        'dashboard.html',
+        categories=categories,
+        counts=counts,
+        admin_labels=admin_labels,
+        admin_counts=admin_counts
+    )
 
 
 with app.app_context():
