@@ -324,6 +324,28 @@ def admin_tickets():
 
     return render_template('admin_tickets.html', tickets=tickets, pagination=pagination)
 
+
+# Dashboard for Admins
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    if not current_user.is_admin:
+        flash("Access denied. Admins only.", "danger")
+        return redirect(url_for('index'))
+
+    # Query total tickets per category
+    data = db.session.query(
+        Ticket.category,
+        db.func.count(Ticket.id)
+    ).group_by(Ticket.category).all()
+
+    categories = [row[0] for row in data]
+    counts = [row[1] for row in data]
+
+    return render_template('dashboard.html', categories=categories, counts=counts)
+
+
+
 with app.app_context():
     db.create_all()
 

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>📊 Ticket Dashboard</h2>
+
+<canvas id="categoryChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('categoryChart').getContext('2d');
+
+    const categoryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ categories | tojson }},
+    datasets: [{
+        label: 'Tickets by Category',
+        data: {{ counts | tojson }},
+        backgroundColor: [
+        '#0d6efd', '#20c997', '#ffc107', '#dc3545', '#6610f2', '#198754'
+    ],
+        borderColor: '#dee2e6',
+        borderWidth: 1
+            }]
+        },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                    precision: 0,
+                        title: {
+                    display: true,
+                        text: 'Number of Tickets'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                        text: 'Category'
+                }
+            }
+        }
+    }
+    });
+</script>
+{% endblock %}
