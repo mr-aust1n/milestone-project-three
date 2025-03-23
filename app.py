@@ -258,6 +258,30 @@ def mark_done(ticket_id):
     
     return redirect(url_for('view_tickets'))
 
+
+# Adding in progress status
+@app.route('/update_status/<int:ticket_id>', methods=['POST'])
+@login_required
+def update_status(ticket_id):
+    if not current_user.is_admin:
+        flash("Access Denied: Admins only.", "danger")
+        return redirect(url_for('index'))
+
+    ticket = Ticket.query.get_or_404(ticket_id)
+    new_status = request.form.get('status')
+
+    if new_status not in ["Submitted", "In Progress", "Done"]:
+        flash("Invalid status update.", "danger")
+        return redirect(url_for('admin_tickets'))
+
+    ticket.status = new_status
+    db.session.commit()
+
+    flash(f"Ticket status updated to {new_status}.", "success")
+    return redirect(url_for('admin_tickets'))
+
+
+
 @app.route('/admin/tickets', methods=['GET'])
 @login_required
 def admin_tickets():
