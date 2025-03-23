@@ -194,6 +194,27 @@ def edit_ticket(ticket_id):
 
     return render_template('edit_ticket.html', ticket=ticket)
 
+@app.route('/delete_ticket/<int:ticket_id>', methods=['POST'])
+@login_required
+def delete_ticket(ticket_id):
+    ticket = Ticket.query.get_or_404(ticket_id)
+
+    # Users can only delete their own "Submitted" tickets
+    if not current_user.is_admin:
+        if ticket.user_id != current_user.id:
+            flash("You don't have permission to delete this ticket.", "danger")
+            return redirect(url_for('view_tickets'))
+        if ticket.status != "Submitted":
+            flash("You can only delete tickets that are still 'Submitted'.", "warning")
+            return redirect(url_for('view_tickets'))
+
+    db.session.delete(ticket)
+    db.session.commit()
+    flash("Ticket deleted successfully.", "success")
+
+    if current_user.is_admin:
+        return redirect(url_for('admin_tickets'))
+    return redirect(url_for('view_tickets'))
 
 
 @app.route('/tickets', methods=['GET'])
