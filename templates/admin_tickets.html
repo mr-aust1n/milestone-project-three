@@ -45,7 +45,20 @@
             <td>{{ ticket.user.email }}</td>
             <td>{{ ticket.category }}</td>
             <td>{{ ticket.description }}</td>
-            <td>{{ ticket.status }}</td>
+            <td>
+                {% if ticket.status == "Submitted" %}
+                <span class="badge bg-secondary">Submitted</span>
+                {% elif ticket.status == "In Progress" %}
+                <span class="badge bg-info text-dark">In Progress</span>
+                {% elif ticket.status == "On Hold" %}
+                <span class="badge bg-warning text-dark">On Hold</span>
+                {% elif ticket.status == "Done" %}
+                <span class="badge bg-success">Done</span>
+                {% else %}
+                <span class="badge bg-light text-dark">{{ ticket.status }}</span>
+                {% endif %}
+            </td>
+
             <td>
                 {% if current_user.is_admin %}
                 <!-- Status Dropdown -->
