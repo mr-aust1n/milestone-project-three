@@ -17,6 +17,10 @@
         <option value="In Progress" {% if request.args.get('status_filter')=="In Progress" %}selected{% endif %}>In
             Progress
         </option>
+        <option value="On Hold" {% if request.args.get('status_filter')=="On Hold" %}selected{% endif %}>On Hold
+        </option>
+
+
         <option value="Done" {% if request.args.get('status_filter')=="Done" %}selected{% endif %}>Done</option>
     </select>
 
@@ -52,6 +56,7 @@
                         </option>
                         <option value="In Progress" {% if ticket.status=="In Progress" %}selected{% endif %}>In Progress
                         </option>
+                        <option value="On Hold" {% if ticket.status=="On Hold" %}selected{% endif %}>On Hold</option>
                         <option value="Done" {% if ticket.status=="Done" %}selected{% endif %}>Done</option>
                     </select>
                 </form>

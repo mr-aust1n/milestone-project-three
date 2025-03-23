@@ -270,7 +270,7 @@ def update_status(ticket_id):
     ticket = Ticket.query.get_or_404(ticket_id)
     new_status = request.form.get('status')
 
-    if new_status not in ["Submitted", "In Progress", "Done"]:
+    if new_status not in ["Submitted", "In Progress", "On Hold", "Done"]:
         flash("Invalid status update.", "danger")
         return redirect(url_for('admin_tickets'))
 
