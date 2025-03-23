@@ -4,6 +4,15 @@
 
 {% block content %}
 <h2>My Support Tickets</h2>
+<!-- Status Badge Legend -->
+<div class="mb-3">
+    <strong>Status Legend:</strong>
+    <span class="badge bg-secondary">Submitted</span>
+    <span class="badge bg-info text-dark">In Progress</span>
+    <span class="badge bg-warning text-dark">On Hold</span>
+    <span class="badge bg-success">Done</span>
+</div>
+
 
 {% if tickets %}
 <form method="GET" action="{{ url_for('view_tickets') }}" class="mb-3">
