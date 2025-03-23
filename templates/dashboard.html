@@ -14,7 +14,24 @@
     <span class="badge bg-success">Done</span>
 </div>
 
-<!-- Chart.js library -->
+<!-- Date Range Filter -->
+<form method="GET" class="row g-3 align-items-end mb-4">
+    <div class="col-auto">
+        <label for="start_date" class="form-label">From:</label>
+        <input type="date" name="start_date" id="start_date" class="form-control"
+            value="{{ request.args.get('start_date', '') }}">
+    </div>
+    <div class="col-auto">
+        <label for="end_date" class="form-label">To:</label>
+        <input type="date" name="end_date" id="end_date" class="form-control"
+            value="{{ request.args.get('end_date', '') }}">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+</form>
+
+<!-- Chart.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Bar Chart 1: Tickets by Category -->
@@ -37,6 +54,10 @@
             }]
         },
         options: {
+        animation: {
+            duration: 1200,
+            easing: 'easeOutBounce'
+        },
         scales: {
             y: {
                 beginAtZero: true,
@@ -59,7 +80,7 @@
     });
 </script>
 
-<!-- Bar Chart 2: Tickets by Admin -->
+<!-- Stacked Bar Chart: Tickets by Admin (by Status) -->
 <hr>
 <h3 class="mt-5">Tickets per Admin (by Status)</h3>
 
@@ -75,22 +96,26 @@
         {
             label: 'Submitted',
             data: {{ dataset_dict['Submitted'] | tojson }},
-        backgroundColor: '#6c757d' // Bootstrap gray
+        backgroundColor: '#6c757d'
                 },
         {
             label: 'In Progress',
             data: {{ dataset_dict['In Progress'] | tojson }},
-        backgroundColor: '#0dcaf0' // Bootstrap info blue
+        backgroundColor: '#0dcaf0'
                 },
         {
             label: 'On Hold',
             data: {{ dataset_dict['On Hold'] | tojson }},
-        backgroundColor: '#ffc107' // Bootstrap warning amber
+        backgroundColor: '#ffc107'
                 }
     ]
         },
         options: {
         responsive: true,
+        animation: {
+            duration: 1200,
+            easing: 'easeOutBounce'
+        },
         plugins: {
             title: {
                 display: true,
@@ -121,6 +146,51 @@
     });
 </script>
 
+<!-- Bar Chart: Done Tickets per Admin -->
+<hr>
+<h3 class="mt-5">Completed Tickets Admin, Filter by date is at the top</h3>
 
+
+<canvas id="doneChart" width="400" height="200"></canvas>
+<script>
+    const doneCtx = document.getElementById('doneChart').getContext('2d');
+
+    new Chart(doneCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ done_labels | tojson }},
+        datasets: [{
+            label: 'Done Tickets',
+            data: {{ done_counts | tojson }},
+        backgroundColor: '#198754'
+            }]
+        },
+        options: {
+        responsive: true,
+        animation: {
+            duration: 1200,
+            easing: 'easeOutBounce'
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    stepSize: 1
+                },
+                title: {
+                    display: true,
+                    text: 'Number of Done Tickets'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Admin'
+                }
+            }
+        }
+    }
+    });
+</script>
 
 {% endblock %}

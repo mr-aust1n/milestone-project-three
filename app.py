@@ -5,6 +5,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, login_
 from flask_paginate import Pagination, get_page_args
 import requests
 from dotenv import load_dotenv
+from datetime import datetime
 import os
 
 load_dotenv()
@@ -52,6 +53,8 @@ class Ticket(db.Model):
     category = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     status = db.Column(db.String(20), default='Submitted')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
     user = db.relationship('User', backref=db.backref('tickets', lazy=True))
 
@@ -333,16 +336,31 @@ def dashboard():
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('index'))
 
-    # Total tickets per category
-    data = db.session.query(
+    # 🗓 Date filtering
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    ticket_query = Ticket.query
+
+    if start_date:
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        ticket_query = ticket_query.filter(Ticket.created_at >= start)
+
+    if end_date:
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+        ticket_query = ticket_query.filter(Ticket.created_at <= end)
+
+    all_tickets = ticket_query.all()
+
+    # 📊 Tickets per category
+    category_counts = db.session.query(
         Ticket.category,
         db.func.count(Ticket.id)
     ).group_by(Ticket.category).all()
 
-    categories = [row[0] for row in data]
-    counts = [row[1] for row in data]
+    categories = [row[0] for row in category_counts]
+    counts = [row[1] for row in category_counts]
 
-    # Admin category mapping
+    # 👤 Admins & categories
     category_admins = {
         "Email Support": ["emails@craigaust.in"],
         "Website Support": ["web@craigaust.in"],
@@ -352,27 +370,32 @@ def dashboard():
         "Other": ["misc@craigaust.in"]
     }
 
-    # Build status-based ticket counts per admin
-    statuses = ["Submitted", "In Progress", "On Hold", "Done"]
-    admin_stats = {}  # {admin: {status: count}}
+    statuses = ["Submitted", "In Progress", "On Hold"]
+    admin_stats = {admin: {status: 0 for status in statuses} for emails in category_admins.values() for admin in emails}
 
-    for email in set(email for emails in category_admins.values() for email in emails):
-        admin_stats[email] = {status: 0 for status in statuses}
-
-    all_tickets = Ticket.query.all()
+    # 🔢 Count tickets by admin/status
     for ticket in all_tickets:
         admins = category_admins.get(ticket.category, ["default_admin@craigaust.in"])
         for admin in admins:
             if ticket.status in statuses:
                 admin_stats[admin][ticket.status] += 1
 
-    # Transform for Chart.js
     admin_labels = list(admin_stats.keys())
     dataset_dict = {status: [] for status in statuses}
-
     for admin in admin_labels:
         for status in statuses:
             dataset_dict[status].append(admin_stats[admin][status])
+
+    # ✅ Done tickets per admin
+    done_admins = {}
+    for ticket in all_tickets:
+        if ticket.status == "Done":
+            admins = category_admins.get(ticket.category, ["default_admin@craigaust.in"])
+            for admin in admins:
+                done_admins[admin] = done_admins.get(admin, 0) + 1
+
+    done_labels = list(done_admins.keys())
+    done_counts = list(done_admins.values())
 
     return render_template(
         'dashboard.html',
@@ -380,7 +403,9 @@ def dashboard():
         counts=counts,
         admin_labels=admin_labels,
         dataset_dict=dataset_dict,
-        statuses=statuses
+        statuses=statuses,
+        done_labels=done_labels,
+        done_counts=done_counts
     )
 
 
