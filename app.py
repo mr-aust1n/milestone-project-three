@@ -352,24 +352,35 @@ def dashboard():
         "Other": ["misc@craigaust.in"]
     }
 
-    # Admin ticket count
-    admin_totals = {}
+    # Build status-based ticket counts per admin
+    statuses = ["Submitted", "In Progress", "On Hold", "Done"]
+    admin_stats = {}  # {admin: {status: count}}
+
+    for email in set(email for emails in category_admins.values() for email in emails):
+        admin_stats[email] = {status: 0 for status in statuses}
 
     all_tickets = Ticket.query.all()
     for ticket in all_tickets:
         admins = category_admins.get(ticket.category, ["default_admin@craigaust.in"])
         for admin in admins:
-            admin_totals[admin] = admin_totals.get(admin, 0) + 1
+            if ticket.status in statuses:
+                admin_stats[admin][ticket.status] += 1
 
-    admin_labels = list(admin_totals.keys())
-    admin_counts = list(admin_totals.values())
+    # Transform for Chart.js
+    admin_labels = list(admin_stats.keys())
+    dataset_dict = {status: [] for status in statuses}
+
+    for admin in admin_labels:
+        for status in statuses:
+            dataset_dict[status].append(admin_stats[admin][status])
 
     return render_template(
         'dashboard.html',
         categories=categories,
         counts=counts,
         admin_labels=admin_labels,
-        admin_counts=admin_counts
+        dataset_dict=dataset_dict,
+        statuses=statuses
     )
 
 

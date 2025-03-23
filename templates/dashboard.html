@@ -61,7 +61,7 @@
 
 <!-- Bar Chart 2: Tickets by Admin -->
 <hr>
-<h3 class="mt-5">Tickets per Admin</h3>
+<h3 class="mt-5">Tickets per Admin (by Status)</h3>
 
 <canvas id="adminChart" width="400" height="200"></canvas>
 <script>
@@ -71,15 +71,42 @@
         type: 'bar',
         data: {
             labels: {{ admin_labels | tojson }},
-        datasets: [{
-            label: 'Total Tickets',
-            data: {{ admin_counts | tojson }},
-        backgroundColor: '#6610f2'
-            }]
+        datasets: [
+        {
+            label: 'Submitted',
+            data: {{ dataset_dict['Submitted'] | tojson }},
+        backgroundColor: '#6c757d' // Bootstrap gray
+                },
+        {
+            label: 'In Progress',
+            data: {{ dataset_dict['In Progress'] | tojson }},
+        backgroundColor: '#0dcaf0' // Bootstrap info blue
+                },
+        {
+            label: 'On Hold',
+            data: {{ dataset_dict['On Hold'] | tojson }},
+        backgroundColor: '#ffc107' // Bootstrap warning amber
+                }
+    ]
         },
         options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Open Tickets by Admin'
+            }
+        },
         scales: {
+            x: {
+                stacked: true,
+                title: {
+                    display: true,
+                    text: 'Admin'
+                }
+            },
             y: {
+                stacked: true,
                 beginAtZero: true,
                 ticks: {
                     stepSize: 1
@@ -88,16 +115,12 @@
                     display: true,
                     text: 'Number of Tickets'
                 }
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: 'Admin'
-                }
             }
         }
     }
     });
 </script>
+
+
 
 {% endblock %}
