@@ -277,9 +277,21 @@ def update_status(ticket_id):
     ticket.status = new_status
     db.session.commit()
 
+    # Sends email to the ticket owner (submitter)
+    send_email(
+        ticket.user.email,
+        f"Your ticket status has been updated to '{new_status}'",
+        f"Hi {ticket.user.email},\n\n"
+        f"Your support ticket (ID: {ticket.id}) has been updated by an admin.\n\n"
+        f"New Status: {new_status}\n"
+        f"Category: {ticket.category}\n"
+        f"Description: {ticket.description}\n\n"
+        f"Please log in to view more details.\n\n"
+        f"Thanks,\nSupport Team"
+    )
+
     flash(f"Ticket status updated to {new_status}.", "success")
     return redirect(url_for('admin_tickets'))
-
 
 
 @app.route('/admin/tickets', methods=['GET'])
