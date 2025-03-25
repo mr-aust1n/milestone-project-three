@@ -202,6 +202,7 @@ def edit_ticket(ticket_id):
 
         ticket.category = category
         ticket.description = description
+        db.session.add(log)
         db.session.commit()
 
         flash("Ticket updated successfully!", "success")
@@ -254,7 +255,7 @@ def view_tickets():
     total = tickets_query.count()
     tickets = tickets_query.offset(offset).limit(per_page).all()
 
-    # ✅ Attach logs to each ticket
+    # Attach logs to each ticket
     for ticket in tickets:
         ticket.logs = ActivityLog.query.filter_by(ticket_id=ticket.id).order_by(ActivityLog.timestamp.desc()).all()
 
@@ -295,9 +296,19 @@ def update_status(ticket_id):
         return redirect(url_for('admin_tickets'))
 
     ticket.status = new_status
+
+    # ✅ This MUST come before session.add(log)
+    log = ActivityLog(
+        ticket_id=ticket.id,
+        user_id=current_user.id,
+        action='Status Update',
+        message=f"Status changed to '{new_status}'",
+    )
+
+    db.session.add(log)
     db.session.commit()
 
-    # Sends email to the ticket owner (submitter)
+    # Email the user (optional)
     send_email(
         ticket.user.email,
         f"Your ticket status has been updated to '{new_status}'",
@@ -306,12 +317,12 @@ def update_status(ticket_id):
         f"New Status: {new_status}\n"
         f"Category: {ticket.category}\n"
         f"Description: {ticket.description}\n\n"
-        f"Please log in to view more details.\n\n"
         f"Thanks,\nSupport Team"
     )
 
     flash(f"Ticket status updated to {new_status}.", "success")
     return redirect(url_for('admin_tickets'))
+
 
 
 @app.route('/admin/tickets', methods=['GET'])
