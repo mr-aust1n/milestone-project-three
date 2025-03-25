@@ -1,23 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}Submit a Support Ticket{% endblock %}
+{% block title %}Submit Ticket{% endblock %}
 
 {% block content %}
-<h2>Submit a Support Ticket</h2>
-<form method="POST">
-    <label for="category">Select Category:</label>
-    <select name="category" required>
-        <option value="Email Support">Email Support</option>
-        <option value="Website Support">Website Support</option>
-        <option value="Access Support">Access Support</option>
-        <option value="QuickBooks Support">QuickBooks Support</option>
-        <option value="Social Media Post">Social Media Post</option>
-        <option value="Other">Other</option>
-    </select>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <h2 class="mb-4">📝 Submit a Support Ticket</h2>
 
-    <label for="description">Describe Your Issue:</label>
-    <textarea name="description" rows="4" required></textarea>
+            <form method="POST" action="{{ url_for('submit_ticket') }}">
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category</label>
+                    <select name="category" id="category" class="form-select" required>
+                        <option value="" disabled selected>Select an option</option>
+                        <option>Email Support</option>
+                        <option>Website Support</option>
+                        <option>Access Support</option>
+                        <option>QuickBooks Support</option>
+                        <option>Social Media Post</option>
+                        <option>Other</option>
+                    </select>
+                </div>
 
-    <button type="submit">Submit Ticket</button>
-</form>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Describe your issue</label>
+                    <textarea name="description" id="description" class="form-control" rows="5" required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Submit Ticket</button>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}
