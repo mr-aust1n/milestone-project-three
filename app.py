@@ -58,6 +58,18 @@ class Ticket(db.Model):
 
     user = db.relationship('User', backref=db.backref('tickets', lazy=True))
 
+class ActivityLog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    action = db.Column(db.String(50), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    ticket = db.relationship('Ticket', backref=db.backref('logs', lazy=True, cascade="all, delete-orphan"))
+    user = db.relationship('User')
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -242,9 +254,14 @@ def view_tickets():
     total = tickets_query.count()
     tickets = tickets_query.offset(offset).limit(per_page).all()
 
+    # ✅ Attach logs to each ticket
+    for ticket in tickets:
+        ticket.logs = ActivityLog.query.filter_by(ticket_id=ticket.id).order_by(ActivityLog.timestamp.desc()).all()
+
     pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
 
     return render_template('tickets.html', tickets=tickets, pagination=pagination)
+
 
 @app.route('/mark_done/<int:ticket_id>')
 @login_required
@@ -324,6 +341,10 @@ def admin_tickets():
     tickets = tickets_query.offset(offset).limit(per_page).all()
 
     pagination = Pagination(page=page, per_page=per_page, total=total, css_framework='bootstrap4')
+
+    for ticket in tickets:
+        ticket.logs = ActivityLog.query.filter_by(ticket_id=ticket.id).order_by(ActivityLog.timestamp.desc()).all()
+
 
     return render_template('admin_tickets.html', tickets=tickets, pagination=pagination)
 
