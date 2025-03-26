@@ -9,7 +9,9 @@ from app import db, send_email, User, Ticket, ActivityLog
 
 
 # Password reset serializer
-s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+from flask import current_app
+s = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+
 
 
 @app.route('/')
