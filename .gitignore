@@ -1,4 +1,12 @@
+# Secrets
 .env
-__pycache__/
-instance/
+
+# DB & Instance
 support_db.db
+instance/
+__pycache__/
+
+# VSCode / OS clutter
+.vscode/
+*.pyc
+.DS_Store
