@@ -6,13 +6,19 @@ load_dotenv()
 class Config:
     # Core Flask config
     SECRET_KEY = os.getenv('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
+    
+    # Use DATABASE_URL (Heroku) or fallback to local SQLite
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        'DATABASE_URL',
+        'sqlite:///instance/support_db.db'
+    )
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # Optional: Automatically turn off DEBUG in production
+    # Automatically disable debug in production
     DEBUG = os.getenv('FLASK_ENV') != 'production'
 
-    # Optional: Mailgun (can access via app.config if preferred)
+    # Optional: Mailgun settings
     MAILGUN_API_KEY = os.getenv('MAILGUN_API_KEY')
     MAILGUN_DOMAIN = os.getenv('MAILGUN_DOMAIN')
     MAILGUN_SENDER = os.getenv('MAILGUN_SENDER')
