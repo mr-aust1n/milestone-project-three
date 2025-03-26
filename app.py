@@ -358,6 +358,38 @@ def admin_tickets():
 
 
     return render_template('admin_tickets.html', tickets=tickets, pagination=pagination)
+from itsdangerous import URLSafeTimedSerializer
+
+# Secret for token generation
+s = URLSafeTimedSerializer(app.secret_key)
+
+@app.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        user = User.query.filter_by(email=email).first()
+
+        if user:
+            token = s.dumps(user.email, salt='password-reset')
+            reset_url = url_for('reset_password', token=token, _external=True)
+
+            send_email(
+                user.email,
+                "Reset Your Password",
+                f"Hi {user.email},\n\n"
+                f"You requested to reset your password.\n"
+                f"Click the link below to choose a new password:\n\n"
+                f"{reset_url}\n\n"
+                f"If you didn’t request this, ignore this email.\n\n"
+                f"— Support Team"
+            )
+
+            flash("An email has been sent with instructions to reset your password.", "info")
+            return redirect(url_for('login'))
+        else:
+            flash("No account found with that email.", "warning")
+
+    return render_template('forgot_password.html')
 
 
 # Dashboard for Admins
@@ -368,7 +400,7 @@ def dashboard():
         flash("Access denied. Admins only.", "danger")
         return redirect(url_for('index'))
 
-    # 🗓 Date filtering
+    #  Date filtering
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
     ticket_query = Ticket.query
@@ -383,7 +415,7 @@ def dashboard():
 
     all_tickets = ticket_query.all()
 
-    # 📊 Tickets per category
+    # Tickets per category
     category_counts = db.session.query(
         Ticket.category,
         db.func.count(Ticket.id)
@@ -392,7 +424,7 @@ def dashboard():
     categories = [row[0] for row in category_counts]
     counts = [row[1] for row in category_counts]
 
-    # 👤 Admins & categories
+    # Admins & categories
     category_admins = {
         "Email Support": ["emails@craigaust.in"],
         "Website Support": ["web@craigaust.in"],
@@ -405,7 +437,7 @@ def dashboard():
     statuses = ["Submitted", "In Progress", "On Hold"]
     admin_stats = {admin: {status: 0 for status in statuses} for emails in category_admins.values() for admin in emails}
 
-    # 🔢 Count tickets by admin/status
+    # Count tickets by admin/status
     for ticket in all_tickets:
         admins = category_admins.get(ticket.category, ["default_admin@craigaust.in"])
         for admin in admins:
@@ -418,7 +450,7 @@ def dashboard():
         for status in statuses:
             dataset_dict[status].append(admin_stats[admin][status])
 
-    # ✅ Done tickets per admin
+    # Done tickets per admin
     done_admins = {}
     for ticket in all_tickets:
         if ticket.status == "Done":
