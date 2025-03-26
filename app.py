@@ -7,15 +7,15 @@ import requests
 from dotenv import load_dotenv
 from datetime import datetime
 import os
+from config import Config
 
+# Load .env variables
 load_dotenv()
 
-app = Flask(__name__)
-app.config.from_object('config.Config')  # ⬅️ Loads everything from config.py
-
-db = SQLAlchemy(app)
-bcrypt = Bcrypt(app)
-login_manager = LoginManager(app)
+# Initialize extensions globally
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
 login_manager.login_view = 'login'
 
 # Mailgun config variables (used in functions)
@@ -35,6 +35,23 @@ def send_email(to, subject, body):
             "text": body,
         }
     )
+
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
+
+    # Initialize extensions with the app
+    db.init_app(app)
+    bcrypt.init_app(app)
+    login_manager.init_app(app)
+
+    # Import routes and models here
+    with app.app_context():
+        import models
+        import routes
+
+    return app
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
