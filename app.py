@@ -45,7 +45,8 @@ def create_app():
 
     # Import routes after app is created
     with app.app_context():
-        from app import routes
+        import routes
+
 
     return app
 
