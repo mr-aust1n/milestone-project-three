@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Login to Craig Austin Support{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-5">
-        <h2 class="mb-4 text-center">Login to Your Account</h2>
+        <h2 class="mb-4 text-center">Login to Craig Austin Support</h2>
         <form method="POST" class="bg-light p-4 rounded shadow-sm">
             <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
@@ -28,7 +28,7 @@
 
 <!-- Image Section -->
 <div class="d-flex justify-content-center mt-5">
-    <img src="{{ url_for('static', filename='images/people-with-laptops.png') }}" alt="a man and women working together"
+    <img src="{{ url_for('static', filename='images/people-with-laptops.png') }}" alt="women working on a laptop"
         class="img-fluid rounded shadow">
 </div>
 {% endblock %}
