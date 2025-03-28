@@ -1,9 +1,54 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Welcome to Support Ticket{% endblock %}
 
 {% block content %}
-<h1>Welcome to my suuport ticket page</h1>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut culpa, explicabo ipsam ex tenetur ullam sint quibusdam
-    perferendis exercitationem, amet optio natus.</p>
+<!-- Hero Section -->
+<section class="text-center py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <h1 class="display-4 fw-bold">Support That Empowers</h1>
+            <p class="lead">Submit, manage, and resolve support tickets effortlessly.</p>
+            <a href="{{ url_for('submit_ticket') }}" class="btn btn-primary btn-lg mt-3">Get Started</a>
+        </div>
+        <div class="col-md-6">
+            <img src="{{ url_for('static', filename='images/lady-with-laptop.png') }}" alt="Lady working on a laptop"
+                class="img-fluid">
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Why Choose CraigAust.in as your Support Platform?</h2>
+        <p class="text-muted">Built for speed, simplicity, and collaboration.</p>
+    </div>
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <img src="{{ url_for('static', filename='images/man-working.png') }}" alt="Lady working on a laptop"
+                class="img-fluid">
+            <h5 class="fw-semibold">Fast Ticket Creation</h5>
+            <p class="text-muted">Open a ticket in seconds and keep your issues organized from the start.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <img src="{{ url_for('static', filename='images/music-lady.png') }}" alt="Lady working on a laptop"
+                class="img-fluid">
+            <h5 class="fw-semibold">Real-Time Updates</h5>
+            <p class="text-muted">Track progress and updates on your tickets in real time.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <img src="{{ url_for('static', filename='images/man-working-laptop.png') }}" alt="Lady working on a laptop"
+                class="img-fluid">
+            <h5 class="fw-semibold">Collaborative Support</h5>
+            <p class="text-muted">Seamlessly work with your team to resolve customer queries faster.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 text-center">
+    <h2 class="fw-bold mb-3">Ready to simplify your support process?</h2>
+    <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">Sign Up Free</a>
+</section>
 {% endblock %}
