@@ -3,23 +3,111 @@
 {% block title %}About Us{% endblock %}
 
 {% block content %}
-<header>
-    <h1>About Us</h1>
-</header>
-<main>
-    <section>
-        <h2>Title1 </h2>
-        <p>Our mission is to provide the best services to our customers and ensure their satisfaction.</p>
-    </section>
-    <section>
-        <h2>Title 2</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum quidem nihil perspiciatis non possimus
-            provident, deleniti, ipsam quod laborum, eos tempora numquam!</p>
-    </section>
-    <section>
-        <h2>Contact Us</h2>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Cupiditate, eius cumque mollitia unde quas iste
-            repellendus quibusdam sequi! Ab at minima minus.</a>.</p>
-    </section>
-</main>
+<!-- Hero-style Intro -->
+<section class="text-centre py-5">
+    <div class="row align-items-centre">
+        <div class="col-md-6 mb-4 mb-md-0">
+            <h1 class="display-5 fw-bold">Your Go-To Business Support Platform</h1>
+            <p class="lead">We help business owners stay focused by taking care of the tech, admin, and digital noise.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="{{ url_for('static', filename='images/ladydev.png') }}" alt="About Us"
+                class="img-fluid rounded shadow">
+        </div>
+    </div>
+</section>
+
+<!-- What We Do -->
+<section class="py-5 bg-light">
+    <div class="text-centre mb-5">
+        <h2 class="fw-bold">What We Support</h2>
+        <p class="text-muted">We provide hands-on help with the tools and platforms your business relies on:</p>
+    </div>
+    <div class="row text-centre">
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">Social Media Support</h5>
+            <p class="text-muted">Help with scheduling, content creation, hashtags, and post management across
+                platforms.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">QuickBooks & Financial Setup</h5>
+            <p class="text-muted">Support with QuickBooks setup, usage, troubleshooting, and small business accounting.
+            </p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">Email & Microsoft 365</h5>
+            <p class="text-muted">Setup and support for email accounts, signatures, Microsoft 365 and syncing across
+                devices.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">The Access Group</h5>
+            <p class="text-muted">Help navigating and using Access Group systems (e.g. Access Care Planning).</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">Website Support</h5>
+            <p class="text-muted">Assistance with updates, WordPress issues, domain setup and basic SEO.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <h5 class="fw-semibold">General Tech Help</h5>
+            <p class="text-muted">Support for everyday tech challenges that slow your business down.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="py-5">
+    <div class="text-centre mb-5">
+        <h2 class="fw-bold">Flexible Pricing</h2>
+        <p class="text-muted">Simple support packages for businesses of all sizes.</p>
+    </div>
+    <div class="row text-centre">
+        <!-- Weekly -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <img src="{{ url_for('static', filename='images/about-man-1.png') }}" class="card-img-top"
+                    alt="Weekly Plan">
+                <div class="card-body">
+                    <h5 class="card-title">Weekly Plan</h5>
+                    <p class="card-text display-6">£50</p>
+                    <p class="text-muted">Short-term support, quick fixes, and one-off tasks covered over 7 days.</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Choose Weekly</a>
+                </div>
+            </div>
+        </div>
+        <!-- Monthly -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <img src="{{ url_for('static', filename='images/about-man-2.png') }}" class="card-img-top"
+                    alt="Monthly Plan">
+                <div class="card-body">
+                    <h5 class="card-title">Monthly Plan</h5>
+                    <p class="card-text display-6">£150</p>
+                    <p class="text-muted">Ongoing support, training, and regular updates for one full month.</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Choose Monthly</a>
+                </div>
+            </div>
+        </div>
+        <!-- Yearly -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow">
+                <img src="{{ url_for('static', filename='images/about-woman-3.png') }}" class="card-img-top"
+                    alt="Yearly Plan">
+                <div class="card-body">
+                    <h5 class="card-title">Yearly Plan</h5>
+                    <p class="card-text display-6">£1500</p>
+                    <p class="text-muted">Best value for businesses that need priority support throughout the year.</p>
+                    <a href="{{ url_for('register') }}" class="btn btn-outline-primary">Choose Yearly</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Info -->
+<section class="py-5 text-centre">
+    <h2 class="fw-bold mb-3">Let’s Make Things Easier</h2>
+    <p class="text-muted mb-4">Reach out to us for anything that’s slowing your business down. We’re ready to help.</p>
+    <a href="{{ url_for('submit_ticket') }}" class="btn btn-primary btn-lg">Submit a Support Request</a>
+</section>
 {% endblock %}
