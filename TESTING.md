@@ -9,12 +9,13 @@ This document outlines manual testing, device/browser testing, known bugs, and s
 | Test | Result |
 |------|--------|
 | Tested with wave.webaim.org | ✅ Pass |
+| Tested with Chrome Lighthouse | ✅ Pass |
 
 https://wave.webaim.org/report#/https://milestone-support-tickets-67fbfa276455.herokuapp.com
 
 
 ![Non User Authentication](static/images/wave.png)
-
+![Non User Authentication](static/images/lighthouse.png)
 
 ## Manual Testing Summary
 
