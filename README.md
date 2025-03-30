@@ -192,4 +192,4 @@ milestone-project-three/
 - Assign tickets to specific support staff
 - Add comments to each ticket
 - Implement search and filters for tickets
-- Add automated email notifications on ticket updates
+- Add automated email notifications on ticket 
