@@ -183,7 +183,8 @@ milestone-project-three/
 - CSS reset [Josh Comeau](https://www.joshwcomeau.com/css/custom-css-reset/).
 - Envato for my graphics [Evato](https://www.envato).
 - Help from W3 schools [W3 Schools]( http://w3schools.com/). 
-
+- https://www.udemy.com/course/python-flask-beginners/.
+- https://www.youtube.com/watch?v=G1FBSYJ45Ww
 ---
 
 ## Future Improvements
