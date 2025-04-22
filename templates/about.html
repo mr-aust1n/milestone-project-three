@@ -3,10 +3,10 @@
 {% block title %}About Us{% endblock %}
 
 {% block content %}
-<!-- Skip link for accessibility -->
+<!-- Skip link for screen readers -->
 <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
 
-<main id="main-content" class="container">
+<main id="main-content" class="container" role="main">
 
     <!-- Hero Intro -->
     <section class="py-5" aria-labelledby="hero-heading">
@@ -29,31 +29,31 @@
             <h2 id="support-heading" class="fw-bold">What We Support</h2>
             <p class="text-muted">We provide hands-on help with the tools and platforms your business relies on:</p>
         </div>
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
+        <div class="row text-center" role="list" aria-label="Support Services List">
+            <div class="col-md-4 mb-4" role="listitem">
                 <h5 class="fw-semibold">Social Media Support</h5>
                 <p class="text-muted">Help with scheduling, content creation, hashtags, and post management across
                     platforms.</p>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <h5 class="fw-semibold">QuickBooks & Financial Setup</h5>
                 <p class="text-muted">Support with QuickBooks setup, usage, troubleshooting, and small business
                     accounting.</p>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <h5 class="fw-semibold">Email & Microsoft 365</h5>
                 <p class="text-muted">Setup and support for email accounts, signatures, Microsoft 365 and syncing across
                     devices.</p>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <h5 class="fw-semibold">The Access Group</h5>
                 <p class="text-muted">Help navigating and using Access Group systems (e.g. Access Care Planning).</p>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <h5 class="fw-semibold">Website Support</h5>
                 <p class="text-muted">Assistance with updates, WordPress issues, domain setup and basic SEO.</p>
             </div>
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <h5 class="fw-semibold">General Tech Help</h5>
                 <p class="text-muted">Support for everyday tech challenges that slow your business down.</p>
             </div>
@@ -66,12 +66,12 @@
             <h2 id="pricing-heading" class="fw-bold">Flexible Pricing</h2>
             <p class="text-muted">Simple support packages for businesses of all sizes.</p>
         </div>
-        <div class="row text-center">
+        <div class="row text-center" role="list" aria-label="Pricing Plans">
             <!-- Weekly -->
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <div class="card h-100 shadow">
                     <img src="{{ url_for('static', filename='images/about-man-1.png') }}" class="card-img-top"
-                        alt="Weekly support plan option">
+                        alt="Weekly support plan illustration">
                     <div class="card-body">
                         <h5 class="card-title">Weekly Plan</h5>
                         <p class="card-text display-6">£50</p>
@@ -83,10 +83,10 @@
                 </div>
             </div>
             <!-- Monthly -->
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <div class="card h-100 shadow">
                     <img src="{{ url_for('static', filename='images/about-man-2.png') }}" class="card-img-top"
-                        alt="Monthly support plan option">
+                        alt="Monthly support plan illustration">
                     <div class="card-body">
                         <h5 class="card-title">Monthly Plan</h5>
                         <p class="card-text display-6">£150</p>
@@ -97,10 +97,10 @@
                 </div>
             </div>
             <!-- Yearly -->
-            <div class="col-md-4 mb-4">
+            <div class="col-md-4 mb-4" role="listitem">
                 <div class="card h-100 shadow">
                     <img src="{{ url_for('static', filename='images/about-woman-3.png') }}" class="card-img-top"
-                        alt="Yearly support plan option">
+                        alt="Yearly support plan illustration">
                     <div class="card-body">
                         <h5 class="card-title">Yearly Plan</h5>
                         <p class="card-text display-6">£1500</p>
@@ -114,13 +114,13 @@
         </div>
     </section>
 
-    <!-- CTA -->
-    <section class="py-5 text-center" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" class="fw-bold mb-3">Let’s Make Things Easier</h2>
+    <!-- CTA Section -->
+    <section class="py-5 text-center" aria-labelledby="cta-heading">
+        <h2 id="cta-heading" class="fw-bold mb-3">Let’s Make Things Easier</h2>
         <p class="text-muted mb-4">Reach out to us for anything that’s slowing your business down. We’re ready to help.
         </p>
         <a href="{{ url_for('submit_ticket') }}" class="btn btn-primary btn-lg"
-            aria-label="Submit a Support Request">Submit a Support Request</a>
+            aria-label="Submit a Support Request Now">Submit a Support Request</a>
     </section>
 
 </main>
