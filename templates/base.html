@@ -2,67 +2,76 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Default Title{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Future global fonts should be linked here -->
 </head>
 
 <body>
 
     <!-- Skip Link -->
-    <a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+    <a href="#main-content" class="visually-hidden-focusable" aria-label="Skip to main content">Skip to main content</a>
 
-    <!-- Header & Navbar -->
-    <header role="banner">
+    <!-- Header & Navigation -->
+    <header role="banner" aria-label="Main site navigation">
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container">
-                <a class="navbar-brand" href="{{ url_for('index') }}">Support Ticket</a>
+                <a class="navbar-brand" href="{{ url_for('index') }}" aria-label="Go to homepage">Support Ticket</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation menu">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <!-- Primary Nav -->
-                    <ul class="navbar-nav me-auto">
+                    <!-- Primary navigation links -->
+                    <ul class="navbar-nav me-auto" role="navigation" aria-label="Primary site sections">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+                            <a class="nav-link" href="{{ url_for('index') }}" aria-label="Home page">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                            <a class="nav-link" href="{{ url_for('about') }}" aria-label="About page">About</a>
                         </li>
+
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('view_tickets') }}">My Tickets</a>
+                            <a class="nav-link" href="{{ url_for('view_tickets') }}"
+                                aria-label="My submitted tickets">My Tickets</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('submit_ticket') }}">Submit Ticket</a>
+                            <a class="nav-link" href="{{ url_for('submit_ticket') }}"
+                                aria-label="Submit a new support ticket">Submit Ticket</a>
                         </li>
                         {% if current_user.is_admin %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('admin_tickets') }}">Admin Panel</a>
+                            <a class="nav-link" href="{{ url_for('admin_tickets') }}"
+                                aria-label="Admin ticket management panel">Admin Panel</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                            <a class="nav-link" href="{{ url_for('dashboard') }}"
+                                aria-label="Admin dashboard">Dashboard</a>
                         </li>
                         {% endif %}
                         {% endif %}
                     </ul>
 
-                    <!-- Auth Nav -->
-                    <ul class="navbar-nav ms-auto">
+                    <!-- Auth navigation links -->
+                    <ul class="navbar-nav ms-auto" role="navigation" aria-label="Authentication links">
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+                            <a class="nav-link" href="{{ url_for('logout') }}"
+                                aria-label="Log out of your account">Logout</a>
                         </li>
                         {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                            <a class="nav-link" href="{{ url_for('login') }}"
+                                aria-label="Login to your account">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('register') }}">Sign Up</a>
+                            <a class="nav-link" href="{{ url_for('register') }}" aria-label="Create a new account">Sign
+                                Up</a>
                         </li>
                         {% endif %}
                     </ul>
@@ -74,29 +83,32 @@
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-    <div class="container mt-3" role="alert" aria-live="polite">
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <section aria-live="polite" aria-label="Notifications">
+        <div class="container mt-3">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close alert"></button>
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
+    </section>
     {% endif %}
     {% endwith %}
 
-    <!-- Main Content -->
-    <main id="main-content" class="container mt-4" role="main">
+    <!-- Main Page Content -->
+    <main id="main-content" class="container mt-4" role="main" aria-label="Main content area">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="text-center mt-4 py-3 border-top" role="contentinfo">
+    <footer class="text-center mt-4 py-3 border-top" role="contentinfo" aria-label="Site footer">
         <p>&copy; 2025 CraigAustin.</p>
     </footer>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
