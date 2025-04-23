@@ -1,24 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Ticket{% endblock %}
+
+{% block content %}
 <main role="main" aria-labelledby="edit-ticket-heading">
     <div class="container">
-        <h2 id="edit-ticket-heading">Edit Ticket</h2>
+        <header>
+            <h2 id="edit-ticket-heading" class="mb-4">Edit Ticket</h2>
+        </header>
 
-        <form method="POST" aria-label="Edit Support Ticket Form" class="mt-4">
-            <section class="mb-3">
-                <label for="category" class="form-label">Select Category:</label>
-                <select id="category" name="category" class="form-select" required>
-                    <!-- options -->
-                </select>
-            </section>
+        <form method="POST" aria-label="Edit Support Ticket Form" class="row gy-4">
+            <fieldset class="col-12" aria-labelledby="ticket-details-group">
+                <legend id="ticket-details-group" class="visually-hidden">Ticket Form Fields</legend>
 
-            <section class="mb-3">
-                <label for="description" class="form-label">Describe Your Issue:</label>
-                <textarea id="description" name="description" rows="4" class="form-control" required>{{
-                    ticket.description }}</textarea>
-            </section>
+                <!-- Category Dropdown -->
+                <section class="mb-3" aria-labelledby="category-label">
+                    <label id="category-label" for="category" class="form-label">Select Category:</label>
+                    <select id="category" name="category" class="form-select" required aria-describedby="category-hint">
+                        <option value="Email Support" {% if ticket.category=='Email Support' %}selected{% endif %}>Email
+                            Support</option>
+                        <option value="Website Support" {% if ticket.category=='Website Support' %}selected{% endif %}>
+                            Website Support</option>
+                        <option value="Access Support" {% if ticket.category=='Access Support' %}selected{% endif %}>
+                            Access Support</option>
+                        <option value="QuickBooks Support" {% if ticket.category=='QuickBooks Support' %}selected{%
+                            endif %}>QuickBooks Support</option>
+                        <option value="Social Media Post" {% if ticket.category=='Social Media Post' %}selected{% endif
+                            %}>Social Media Post</option>
+                        <option value="Other" {% if ticket.category=='Other' %}selected{% endif %}>Other</option>
+                    </select>
+                    <p id="category-hint" class="visually-hidden">Choose a support category related to your issue.</p>
+                </section>
 
-            <section class="mb-3">
-                <button type="submit" class="btn btn-primary w-100">Update Ticket</button>
-            </section>
+                <!-- Description Textarea -->
+                <section class="mb-3" aria-labelledby="description-label">
+                    <label id="description-label" for="description" class="form-label">Describe Your Issue:</label>
+                    <textarea id="description" name="description" rows="4" class="form-control" required
+                        aria-describedby="description-hint">{{ ticket.description }}</textarea>
+                    <p id="description-hint" class="visually-hidden">Explain your problem in detail so our team can
+                        help.</p>
+                </section>
+
+                <!-- Submit Button -->
+                <section class="mt-3" aria-label="Submit form">
+                    <button type="submit" class="btn btn-primary w-100" aria-label="Update this support ticket">Update
+                        Ticket</button>
+                </section>
+            </fieldset>
         </form>
     </div>
 </main>
+{% endblock %}
