@@ -1,28 +1,24 @@
-{% extends 'base.html' %}
+<main role="main" aria-labelledby="edit-ticket-heading">
+    <div class="container">
+        <h2 id="edit-ticket-heading">Edit Ticket</h2>
 
-{% block title %}Edit Ticket{% endblock %}
+        <form method="POST" aria-label="Edit Support Ticket Form" class="mt-4">
+            <section class="mb-3">
+                <label for="category" class="form-label">Select Category:</label>
+                <select id="category" name="category" class="form-select" required>
+                    <!-- options -->
+                </select>
+            </section>
 
-{% block content %}
-<h2>Edit Ticket</h2>
-<form method="POST">
-    <label for="category">Select Category:</label>
-    <select name="category" required>
-        <option value="Email Support" {% if ticket.category=='Email Support' %}selected{% endif %}>Email Support
-        </option>
-        <option value="Website Support" {% if ticket.category=='Website Support' %}selected{% endif %}>Website Support
-        </option>
-        <option value="Access Support" {% if ticket.category=='Access Support' %}selected{% endif %}>Access Support
-        </option>
-        <option value="QuickBooks Support" {% if ticket.category=='QuickBooks Support' %}selected{% endif %}>QuickBooks
-            Support</option>
-        <option value="Social Media Post" {% if ticket.category=='Social Media Post' %}selected{% endif %}>Social Media
-            Post</option>
-        <option value="Other" {% if ticket.category=='Other' %}selected{% endif %}>Other</option>
-    </select>
+            <section class="mb-3">
+                <label for="description" class="form-label">Describe Your Issue:</label>
+                <textarea id="description" name="description" rows="4" class="form-control" required>{{
+                    ticket.description }}</textarea>
+            </section>
 
-    <label for="description">Describe Your Issue:</label>
-    <textarea name="description" rows="4" required>{{ ticket.description }}</textarea>
-
-    <button type="submit" class="btn btn-primary">Update Ticket</button>
-</form>
-{% endblock %}
+            <section class="mb-3">
+                <button type="submit" class="btn btn-primary w-100">Update Ticket</button>
+            </section>
+        </form>
+    </div>
+</main>
