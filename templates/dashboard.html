@@ -3,42 +3,72 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-<h2>📊 Ticket Dashboard</h2>
+<main role="main" aria-labelledby="dashboard-heading">
+    <h2 id="dashboard-heading">Ticket Dashboard</h2>
 
-<!-- Status Badge Legend -->
-<div class="mb-4">
-    <strong>Status Legend:</strong>
-    <span class="badge bg-secondary">Submitted</span>
-    <span class="badge bg-info text-dark">In Progress</span>
-    <span class="badge bg-warning text-dark">On Hold</span>
-    <span class="badge bg-success">Done</span>
-</div>
+    <!-- Status Badge Legend -->
+    <section aria-labelledby="status-legend" class="mb-4">
+        <h3 id="status-legend" class="visually-hidden">Ticket status color legend</h3>
+        <p>
+            <strong>Status Legend:</strong>
+            <span class="badge bg-secondary" aria-label="Submitted ticket">Submitted</span>
+            <span class="badge bg-info text-dark" aria-label="In progress ticket">In Progress</span>
+            <span class="badge bg-warning text-dark" aria-label="On hold ticket">On Hold</span>
+            <span class="badge bg-success" aria-label="Completed ticket">Done</span>
+        </p>
+    </section>
 
-<!-- Date Range Filter -->
-<form method="GET" class="row g-3 align-items-end mb-4">
-    <div class="col-auto">
-        <label for="start_date" class="form-label">From:</label>
-        <input type="date" name="start_date" id="start_date" class="form-control"
-            value="{{ request.args.get('start_date', '') }}">
-    </div>
-    <div class="col-auto">
-        <label for="end_date" class="form-label">To:</label>
-        <input type="date" name="end_date" id="end_date" class="form-control"
-            value="{{ request.args.get('end_date', '') }}">
-    </div>
-    <div class="col-auto">
-        <button type="submit" class="btn btn-primary">Filter</button>
-    </div>
-</form>
+    <!-- Date Filter -->
+    <section aria-labelledby="date-filter" class="mb-4">
+        <h3 id="date-filter" class="visually-hidden">Filter by date range</h3>
+        <form method="GET" class="row g-3 align-items-end" role="search" aria-label="Date range filter for charts">
+            <div class="col-auto">
+                <label for="start_date" class="form-label">From:</label>
+                <input type="date" name="start_date" id="start_date" class="form-control"
+                    value="{{ request.args.get('start_date', '') }}">
+            </div>
+            <div class="col-auto">
+                <label for="end_date" class="form-label">To:</label>
+                <input type="date" name="end_date" id="end_date" class="form-control"
+                    value="{{ request.args.get('end_date', '') }}">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+        </form>
+    </section>
+
+    <!-- Chart 1: Tickets by Category -->
+    <section aria-labelledby="category-chart-heading" class="mb-5">
+        <h3 id="category-chart-heading">Tickets by Category</h3>
+        <p class="text-muted">Bar chart showing total tickets grouped by category.</p>
+        <canvas id="categoryChart" width="400" height="200" role="img"
+            aria-label="Tickets by Category Bar Chart"></canvas>
+    </section>
+
+    <!-- Chart 2: Tickets by Admin by Status -->
+    <section aria-labelledby="admin-status-chart-heading" class="mb-5">
+        <h3 id="admin-status-chart-heading">Tickets per Admin (by Status)</h3>
+        <p class="text-muted">Stacked bar chart showing open tickets handled by each admin grouped by status.</p>
+        <canvas id="adminChart" width="400" height="200" role="img"
+            aria-label="Open Tickets by Admin, stacked by status"></canvas>
+    </section>
+
+    <!-- Chart 3: Completed Tickets -->
+    <section aria-labelledby="done-chart-heading" class="mb-5">
+        <h3 id="done-chart-heading">Completed Tickets per Admin</h3>
+        <p class="text-muted">Filtered by date range selected above.</p>
+        <canvas id="doneChart" width="400" height="200" role="img"
+            aria-label="Completed Tickets per Admin Bar Chart"></canvas>
+    </section>
+</main>
 
 <!-- Chart.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- Bar Chart 1: Tickets by Category -->
-<canvas id="categoryChart" width="400" height="200"></canvas>
+<!-- JS for Charts -->
 <script>
     const ctx = document.getElementById('categoryChart').getContext('2d');
-
     new Chart(ctx, {
         type: 'bar',
         data: {
@@ -46,48 +76,27 @@
         datasets: [{
             label: 'Tickets by Category',
             data: {{ counts | tojson }},
-        backgroundColor: [
-            '#0d6efd', '#20c997', '#ffc107', '#dc3545', '#6610f2', '#198754'
-        ],
+        backgroundColor: ['#0d6efd', '#20c997', '#ffc107', '#dc3545', '#6610f2', '#198754'],
         borderColor: '#dee2e6',
         borderWidth: 1
             }]
         },
         options: {
-        animation: {
-            duration: 1200,
-            easing: 'easeOutBounce'
-        },
+        animation: { duration: 1200, easing: 'easeOutBounce' },
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    stepSize: 1
-                },
-                title: {
-                    display: true,
-                    text: 'Number of Tickets'
-                }
+                ticks: { stepSize: 1 },
+                title: { display: true, text: 'Number of Tickets' }
             },
             x: {
-                title: {
-                    display: true,
-                    text: 'Category'
-                }
+                title: { display: true, text: 'Category' }
             }
         }
     }
     });
-</script>
 
-<!-- Stacked Bar Chart: Tickets by Admin (by Status) -->
-<hr>
-<h3 class="mt-5">Tickets per Admin (by Status)</h3>
-
-<canvas id="adminChart" width="400" height="200"></canvas>
-<script>
     const adminCtx = document.getElementById('adminChart').getContext('2d');
-
     new Chart(adminCtx, {
         type: 'bar',
         data: {
@@ -112,49 +121,26 @@
         },
         options: {
         responsive: true,
-        animation: {
-            duration: 1200,
-            easing: 'easeOutBounce'
-        },
+        animation: { duration: 1200, easing: 'easeOutBounce' },
         plugins: {
-            title: {
-                display: true,
-                text: 'Open Tickets by Admin'
-            }
+            title: { display: true, text: 'Open Tickets by Admin' }
         },
         scales: {
             x: {
                 stacked: true,
-                title: {
-                    display: true,
-                    text: 'Admin'
-                }
+                title: { display: true, text: 'Admin' }
             },
             y: {
                 stacked: true,
                 beginAtZero: true,
-                ticks: {
-                    stepSize: 1
-                },
-                title: {
-                    display: true,
-                    text: 'Number of Tickets'
-                }
+                ticks: { stepSize: 1 },
+                title: { display: true, text: 'Number of Tickets' }
             }
         }
     }
     });
-</script>
 
-<!-- Bar Chart: Done Tickets per Admin -->
-<hr>
-<h3 class="mt-5">Completed Tickets Admin, Filter by date is at the top</h3>
-
-
-<canvas id="doneChart" width="400" height="200"></canvas>
-<script>
     const doneCtx = document.getElementById('doneChart').getContext('2d');
-
     new Chart(doneCtx, {
         type: 'bar',
         data: {
@@ -167,30 +153,18 @@
         },
         options: {
         responsive: true,
-        animation: {
-            duration: 1200,
-            easing: 'easeOutBounce'
-        },
+        animation: { duration: 1200, easing: 'easeOutBounce' },
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    stepSize: 1
-                },
-                title: {
-                    display: true,
-                    text: 'Number of Done Tickets'
-                }
+                ticks: { stepSize: 1 },
+                title: { display: true, text: 'Number of Done Tickets' }
             },
             x: {
-                title: {
-                    display: true,
-                    text: 'Admin'
-                }
+                title: { display: true, text: 'Admin' }
             }
         }
     }
     });
 </script>
-
 {% endblock %}
