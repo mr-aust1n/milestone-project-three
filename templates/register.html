@@ -3,36 +3,52 @@
 {% block title %}Register{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 col-lg-6">
-        <!-- Dark Blue Background Section -->
-        <div class="bg-primary text-white p-5 rounded shadow-sm">
-            <h2 class="mb-4 text-center">Create Your Account</h2>
-            <form method="POST">
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email address</label>
-                    <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" id="password" class="form-control"
-                        placeholder="Create a strong password" required>
-                </div>
-                <button type="submit" class="btn btn-light w-100 text-primary fw-bold">Register</button>
+<main role="main" aria-labelledby="register-heading">
+    <section class="row justify-content-center" aria-label="Registration Form Section">
+        <div class="col-md-8 col-lg-6">
+            <!-- Dark Blue Background Section -->
+            <section class="bg-primary text-white p-5 rounded shadow-sm" aria-label="Create Account Area">
+                <header class="text-center mb-4">
+                    <h2 id="register-heading">Create Your Account</h2>
+                </header>
 
-                <div class="mt-3 text-center">
-                    <a href="{{ url_for('login') }}" class="text-white text-decoration-underline">Already have an
-                        account? Login</a>
-                </div>
-            </form>
+                <form method="POST" aria-label="Registration Form">
+                    <fieldset>
+                        <legend class="visually-hidden">Account Information</legend>
+
+                        <section class="mb-3">
+                            <label for="email" class="form-label">Email address</label>
+                            <input type="email" name="email" id="email" class="form-control"
+                                placeholder="you@example.com" required>
+                        </section>
+
+                        <section class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" name="password" id="password" class="form-control"
+                                placeholder="Create a strong password" required>
+                        </section>
+
+                        <section>
+                            <button type="submit" class="btn btn-light w-100 text-primary fw-bold">Register</button>
+                        </section>
+
+                        <section class="mt-3 text-center">
+                            <a href="{{ url_for('login') }}" class="text-white text-decoration-underline">Already have
+                                an account? Login</a>
+                        </section>
+                    </fieldset>
+                </form>
+            </section>
         </div>
-    </div>
-</div>
+    </section>
 
-<!-- Image Section -->
-<div class="d-flex justify-content-center mt-5">
-    <img src="{{ url_for('static', filename='images/people-with-laptops-set-two.png') }}" alt="Women working together"
-        class="img-fluid rounded shadow">
-</div>
+    <!-- Image Section -->
+    <section class="d-flex justify-content-center mt-5" aria-label="Illustration">
+        <figure class="text-center">
+            <img src="{{ url_for('static', filename='images/people-with-laptops-set-two.png') }}"
+                alt="Women working together" class="img-fluid rounded shadow">
+            <figcaption class="visually-hidden">Illustration of women collaborating on laptops</figcaption>
+        </figure>
+    </section>
+</main>
 {% endblock %}
