@@ -3,33 +3,45 @@
 {% block title %}Submit Ticket{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-8 col-md-10">
-            <h2 class="mb-4">📝 Submit a Support Ticket</h2>
+<main role="main" aria-labelledby="submit-ticket-heading">
+    <section class="container" aria-label="Support Ticket Submission Section">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <header class="mb-4 text-center">
+                    <h2 id="submit-ticket-heading">Submit a Support Ticket</h2>
+                </header>
 
-            <form method="POST" action="{{ url_for('submit_ticket') }}">
-                <div class="mb-3">
-                    <label for="category" class="form-label">Category</label>
-                    <select name="category" id="category" class="form-select" required>
-                        <option value="" disabled selected>Select an option</option>
-                        <option>Email Support</option>
-                        <option>Website Support</option>
-                        <option>Access Support</option>
-                        <option>QuickBooks Support</option>
-                        <option>Social Media Post</option>
-                        <option>Other</option>
-                    </select>
-                </div>
+                <form method="POST" action="{{ url_for('submit_ticket') }}" aria-label="Support Ticket Form">
+                    <fieldset>
+                        <legend class="visually-hidden">Ticket Details</legend>
 
-                <div class="mb-3">
-                    <label for="description" class="form-label">Describe your issue</label>
-                    <textarea name="description" id="description" class="form-control" rows="5" required></textarea>
-                </div>
+                        <section class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select name="category" id="category" class="form-select" required>
+                                <option value="" disabled selected>Select an option</option>
+                                <option>Email Support</option>
+                                <option>Website Support</option>
+                                <option>Access Support</option>
+                                <option>QuickBooks Support</option>
+                                <option>Social Media Post</option>
+                                <option>Other</option>
+                            </select>
+                        </section>
 
-                <button type="submit" class="btn btn-primary w-100">Submit Ticket</button>
-            </form>
+                        <section class="mb-3">
+                            <label for="description" class="form-label">Describe your issue</label>
+                            <textarea name="description" id="description" class="form-control" rows="5"
+                                required></textarea>
+                        </section>
+
+                        <section>
+                            <button type="submit" class="btn btn-primary w-100"
+                                aria-label="Submit your support ticket">Submit Ticket</button>
+                        </section>
+                    </fieldset>
+                </form>
+            </div>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 {% endblock %}
