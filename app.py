@@ -15,12 +15,13 @@ load_dotenv()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
-login_manager.login_view = 'login'
+login_manager.login_view = "login"
 
 # Mailgun config
 MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
 MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN")
 MAILGUN_SENDER = os.getenv("MAILGUN_SENDER")
+
 
 def send_email(to, subject, body):
     return requests.post(
@@ -31,8 +32,9 @@ def send_email(to, subject, body):
             "to": to,
             "subject": subject,
             "text": body,
-        }
+        },
     )
+
 
 # Flask App Factory
 def create_app():
@@ -45,10 +47,10 @@ def create_app():
 
     # Import routes after app is created
     with app.app_context():
-        import routes
-
+        import routes  # noqa: F401
 
     return app
+
 
 # MODELS
 class User(db.Model, UserMixin):
@@ -58,31 +60,35 @@ class User(db.Model, UserMixin):
     is_admin = db.Column(db.Boolean, default=False)
 
     def set_password(self, password):
-        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+        self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password_hash, password)
 
+
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     category = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    status = db.Column(db.String(20), default='Submitted')
+    status = db.Column(db.String(20), default="Submitted")
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    user = db.relationship('User', backref=db.backref('tickets', lazy=True))
+    user = db.relationship("User", backref=db.backref("tickets", lazy=True))
+
 
 class ActivityLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ticket_id = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    ticket_id = db.Column(db.Integer, db.ForeignKey("ticket.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     action = db.Column(db.String(50), nullable=False)
     message = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
-    ticket = db.relationship('Ticket', backref=db.backref('logs', lazy=True, cascade="all, delete-orphan"))
-    user = db.relationship('User')
+    ticket = db.relationship(
+        "Ticket", backref=db.backref("logs", lazy=True, cascade="all, delete-orphan")
+    )
+    user = db.relationship("User")
 
 
 # Flask-Login loader

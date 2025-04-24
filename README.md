@@ -84,7 +84,6 @@ Status
  [Database Schema](static/images/database_schema.png)
 
  
-
 ## Features
 
 ### MVP Features
@@ -167,6 +166,29 @@ Testing was a mix of **manual** and **automated** methods:
 All sensitive settings are stored in environment variables and loaded through a central `config.py` file using Python's `os.getenv()` and `python-dotenv`.
 
 This ensures secure, flexible, and environment-specific configuration for both development and production environments.
+
+
+### PEP8 Compliance
+
+Code quality and style were maintained throughout the project using two industry-standard tools: **Flake8** and **Black**.
+
+- **Linting** was performed using `flake8`, with a configuration file (`.flake8`) specifying the following:
+  - `exclude = venv` – to ignore third-party packages and focus only on project code.
+  - `max-line-length = 102` – slightly extended from the PEP8 default to accommodate readable lines without unnecessary wrapping but still left my code readable.
+- All Python files were scanned and verified to be compliant with [PEP8](https://peps.python.org/pep-0008/) standards, including rules for:
+  - Spacing and indentation  
+  - Function and variable naming conventions  
+  - Import ordering and blank lines  
+  - Docstring usage
+- Any `E501` warnings for long lines within the `venv/` directory were ignored as they do not pertain to the submitted codebase.
+- All remaining issues within the project files (`app.py`, `routes.py`, etc.) were resolved, with no critical errors after final linting.
+- **Black** was used to automatically format all Python code, ensuring consistent spacing, quoting, and line wrapping.
+
+
+- [Black Formatter](static/images/black_formatter.png)  
+- [Flake8 Formatted](static/images/black8a.png)  
+- [Flake8 Pass](static/images/black8b.png)
+
 
 #### Environment Variables Used:
 
