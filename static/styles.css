@@ -60,10 +60,29 @@ h6 {
     text-wrap: balance;
 }
 
-/*
-  9. Create a root stacking context
-*/
+/* 9. Create a root stacking context */
 #root,
 #__next {
     isolation: isolate;
+}
+
+/* 10. Improve focus visibility for keyboard users */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus {
+    outline: 2px solid #FF69B4;
+    /* Replace with your project’s accent color */
+    outline-offset: 3px;
+    transition: outline 0.2s ease-in-out;
+}
+
+/* Optional enhancement: show outlines only on keyboard focus */
+:focus-visible {
+    outline: 2px solid #FF69B4;
+}
+
+:focus:not(:focus-visible) {
+    outline: none;
 }
