@@ -41,7 +41,41 @@ All wireframes were created using adobe illustrator and can be found
 - Responsive design across mobile, tablet, and desktop.
 ![Non User Authentication](static/images/SupportMockup.png)
 
----
+
+
+
+## Database Schema
+
+The application uses SQLAlchemy ORM to manage a relational database. It includes three primary models:
+
+- **User**: Stores login credentials, roles, and links to submitted tickets.
+- **Ticket**: Represents a support request created by a user.
+- **Status**: Tracks the current state of each ticket (e.g. Submitted, In Progress, Done).
+
+### Entity Relationships
+
+User
+ └── id (PK)
+ └── email
+ └── password
+ └── role
+ └── tickets (1-to-many)
+
+Ticket
+ └── id (PK)
+ └── category
+ └── description
+ └── priority
+ └── created_at
+ └── user_id (FK → User)
+ └── status_id (FK → Status)
+
+Status
+ └── id (PK)
+ └── name
+ └── tickets (1-to-many)
+
+ [Database Schema](static/images/database_schema.png)
 
 ## Features
 
@@ -57,11 +91,11 @@ All wireframes were created using adobe illustrator and can be found
 - **Regular Users**: Can log in and create/view their own tickets.
 - **Admins**: Can view all tickets, assign users, change statuses, and delete tickets.
 
----
 
 ## Testing
 
 Testing was a mix of **manual** and **automated** methods:
+**Go to TESTING →** [TESTING.md](TESTING.md)
 
 ### Manual Tests
 - Form validation for all inputs (ticket submission, login, etc.)
