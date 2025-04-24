@@ -34,14 +34,11 @@ All wireframes were created using adobe illustrator and can be found
 ![Non User Authentication](static/images/mobilewire.png)
 
 
-
 ###  Key UX Goals
 - Minimal, clean layout for both users and admins.
 - Clear call-to-actions for creating and updating tickets.
 - Responsive design across mobile, tablet, and desktop.
 ![Non User Authentication](static/images/SupportMockup.png)
-
-
 
 
 ## Database Schema
@@ -51,6 +48,13 @@ The application uses SQLAlchemy ORM to manage a relational database. It includes
 - **User**: Stores login credentials, roles, and links to submitted tickets.
 - **Ticket**: Represents a support request created by a user.
 - **Status**: Tracks the current state of each ticket (e.g. Submitted, In Progress, Done).
+
+### Rationale & Design Considerations
+
+The schema was designed based on real-world user stories. Regular users need to raise support tickets and track progress by logging in. Admins require access to all tickets, along with the ability to update statuses and manage workload. By separating ticket `Status` into its own table, the design allows for future scalability, including analytics, filters, and workflow automation.
+
+The database schema supports full Create, Read, Update, and Delete operations using SQLAlchemy. Field types have been chosen for flexibility and performance (e.g., `Text` for descriptions, `DateTime` for timestamps). This structure also allows for future enhancements like assigning tickets to support staff or adding threaded comments.
+
 
 ### Entity Relationships
 
@@ -74,8 +78,12 @@ Status
  └── id (PK)
  └── name
  └── tickets (1-to-many)
+ 
+### Visual ERD
 
  [Database Schema](static/images/database_schema.png)
+
+ 
 
 ## Features
 
@@ -153,7 +161,27 @@ Testing was a mix of **manual** and **automated** methods:
 - GitHub (version control)
 - Mailgun (for email confirmations)
 
----
+ 
+### Configuration
+
+All sensitive settings are stored in environment variables and loaded through a central `config.py` file using Python's `os.getenv()` and `python-dotenv`.
+
+This ensures secure, flexible, and environment-specific configuration for both development and production environments.
+
+#### Environment Variables Used:
+
+- `SECRET_KEY` – Flask app security
+- `DATABASE_URL` – PostgreSQL URL from Heroku (fallbacks to SQLite locally)
+- `FLASK_ENV` – Toggles debug mode (`production` disables it)
+- `MAILGUN_API_KEY`, `MAILGUN_DOMAIN`, `MAILGUN_SENDER`, `MAILGUN_WEBHOOK_SECRET`, `MAILGUN_PUBLIC_KEY` – Used for Mailgun email integration
+
+#### Key Features in `config.py`:
+
+- Single point of truth for all configuration settings
+- Loads `.env` file locally for development using `python-dotenv`
+- Automatically fixes Heroku's `postgres://` to `postgresql://`
+- Disables `DEBUG` mode automatically in production
+
 
 ## Deployment
 
@@ -167,7 +195,6 @@ Deployed via **Heroku** using the following process:
 
 **For all go to →** [Deployment](static/images/deploy.png)
 
----
 
 ##  Security Considerations
 
@@ -177,11 +204,7 @@ Deployed via **Heroku** using the following process:
 - CSRF protection is enabled on all forms.
 - Minimum 8 characters for the password.
 
-
----
-
 ##  File Structure (simplified)
-
 ```
 milestone-project-three/
 
@@ -206,9 +229,6 @@ milestone-project-three/
 └── .vscode/
 
 ```
-
----
-
 ## Credits
 
 - Design inspiration from various helpdesk UIs that I found on google.
