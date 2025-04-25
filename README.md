@@ -313,24 +313,46 @@ Code quality and style were maintained throughout the project using two industry
 
 ## Deployment
 
-Deployed via **Heroku** using the following process:
+The application was deployed to **Heroku** using the following process:
 
-1. Set up PostgreSQL database on Heroku
-2. Configure `Procfile`, `requirements.txt`, `runtime.txt`
-3. Set environment variables using Heroku dashboard
-4. Pushed code via GitHub → connected Heroku app
-5. Verified deployed version matches development version
+1. **Prepare the Application for Deployment**
+   - Created a `Procfile` to tell Heroku how to run the app.
+   - Ensured `requirements.txt` lists all required packages.
+   - Added a `runtime.txt` to specify the Python version.
+   - Confirmed that database URI fallback logic is included (`sqlite` locally, `PostgreSQL` on Heroku).
 
-**For all go to →** [Deployment](static/images/deploy.png)
+2. **Set Up the Heroku App**
+   - Created a new application on the Heroku dashboard.
+   - Provisioned a **Heroku Postgres** database addon.
+   - Configured environment variables (`DATABASE_URL`, `SECRET_KEY`, `MAILGUN_API_KEY`, etc.) using the **Settings > Config Vars** section.
 
+3. **Connect to GitHub**
+   - Linked the GitHub repository to the Heroku app.
+   - Enabled **automatic deployment** from the `main` branch.
+   - Manually deployed the initial version to verify setup.
 
-##  Security Considerations
+4. **Database Migration**
+   - Opened the Heroku console and ran database migrations (e.g., `flask shell` -> `db.create_all()`).
+   - Verified tables were created successfully.
 
-- All secret keys and credentials are stored as environment variables.
-- No working API keys or passwords are committed to the repo.
-- Admin-only routes are protected via decorators.
-- CSRF protection is enabled on all forms.
-- Minimum 8 characters for the password.
+5. **Post-Deployment Testing**
+   - Visited the deployed URL to verify that all functionality matched the local development version.
+   - Checked user authentication, ticket submission, admin dashboard access, and email notifications.
+
+![Deployment Screenshot](static/images/deploy.png)
+
+---
+
+## Security Considerations
+
+- All sensitive information (such as secret keys, API keys, database credentials) is securely stored as environment variables.
+- No working credentials are ever committed to the GitHub repository.
+- Admin-only features are protected using decorators (`@login_required`, `@admin_required`).
+- Passwords are hashed using **bcrypt** and have a minimum required length of 8 characters.
+- CSRF protection is enabled automatically via Flask-WTF for all forms.
+- Regular updates and monitoring of package dependencies are planned to mitigate vulnerabilities.
+
+---
 
 ##  File Structure (simplified)
 ```
