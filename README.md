@@ -1,3 +1,24 @@
+## Table of Contents
+
+- [Project Purpose and Rationale](#project-purpose-and-rationale)
+- [Target Audience](#target-audience)
+- [UX / Design](#ux--design)
+- [Database Schema](#database-schema)
+- [Accessibility](#accessibility)
+- [Features](#features)
+- [Data Model Justification](#data-model-justification)
+- [Usable Relational Database](#usable-relational-database)
+- [Database Configuration Management](#database-configuration-management)
+- [Testing](#testing)
+- [Technologies Used](#technologies-used)
+- [Deployment](#deployment)
+- [Security Considerations](#security-considerations)
+- [File Structure](#file-structure-simplified)
+- [Credits](#credits)
+- [Future Improvements](#future-improvements)
+
+
+
 ## IT Ticket Tracker — Milestone 3 Project
 
 I have created  a simple full-stack web app designed to manage IT support tickets. Users can register, log in, and raise new support requests. Admins can view, edit, assign, and close tickets in real-time. The app is styled for usability, fully responsive, and built with accessibility and CRUD in mind.
@@ -7,6 +28,50 @@ I have created  a simple full-stack web app designed to manage IT support ticket
 ### Live Site
 
 **Hosted on Heroku**: [CraigAust.in](https://milestone-support-tickets-67fbfa276455.herokuapp.com)
+
+---
+
+## Project Purpose and Rationale
+
+The purpose of this project is to create a simple yet powerful **IT Ticket Tracking System** that allows users to raise support requests and track their progress in real-time, while giving administrators the ability to manage, update, and respond to these tickets efficiently. 
+
+The system addresses a real-world need: many small to medium-sized businesses and organizations lack a lightweight, affordable solution for internal IT support management. This project offers a streamlined tool to improve communication, accountability, and service speed between users and support teams.
+
+---
+
+## Target Audience
+
+- **Internal Employees** who need to report technical issues and monitor ticket progress.
+- **IT Support Staff and Administrators** who need a centralized place to manage incoming support requests and maintain an activity log for transparency.
+
+The system is designed to be intuitive for non-technical users while offering advanced management features for administrators.
+
+---
+
+## Data Structure
+
+The application uses a well-designed relational database with three main tables:
+
+- **User Table**: Stores user credentials and roles (admin or regular user).
+- **Ticket Table**: Stores support ticket details, linked to the submitting user.
+- **Activity Log Table**: Tracks all updates and actions taken on each ticket for transparency.
+
+This structure supports full CRUD operations, maintains a clear audit trail, and allows for future expansion such as adding ticket priorities, assignments, and threaded discussions.
+
+---
+
+## Security Features
+
+Security was a core consideration in development:
+
+- **Authentication and Authorization**: Only registered users can create or manage tickets. Admin routes are protected with access control decorators.
+- **Password Security**: Passwords are hashed using bcrypt before being stored in the database.
+- **Environment Variables**: All sensitive keys (database URIs, API keys, secret keys) are securely managed through environment variables.
+- **CSRF Protection**: Flask-WTF is used to automatically protect all forms against CSRF attacks.
+- **Role-Based Access Control**: Users can only access and edit their own tickets; admins can view and manage all tickets.
+- **Data Validation**: All form inputs are validated both client-side and server-side to prevent malicious input.
+
+Together, these measures ensure that user data is protected, interactions are secure, and the platform can be trusted by its users.
 
 ---
 
@@ -91,7 +156,9 @@ ActivityLog
 
  [Database Schema](static/images/database_schema.png)
 
- ## Accessibility
+---
+
+## Accessibility
 
 Accessibility was a core consideration throughout the design and development of this project to ensure that it is usable by as many people as possible, including users with disabilities.
 
