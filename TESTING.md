@@ -8,7 +8,7 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 
 | Tool                        | Result |
 |-----------------------------|--------|
-| [WAVE](https://wave.webaim.org/)           | ✅ Pass |
+| [WAVE](https://wave.webaim.org/)     | ✅ Pass |
 | Chrome Lighthouse (97/100) | ✅ Pass |
 
 ![WAVE Test](static/images/wave.png)

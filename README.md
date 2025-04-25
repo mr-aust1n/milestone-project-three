@@ -83,7 +83,46 @@ Status
 
  [Database Schema](static/images/database_schema.png)
 
- 
+ ## Accessibility
+
+Accessibility was a core consideration throughout the design and development of this project to ensure that it is usable by as many people as possible, including users with disabilities.
+
+The following steps were taken to improve accessibility:
+
+- **Semantic HTML:** All pages use semantic HTML5 elements (e.g., `<header>`, `<main>`, `<nav>`, `<section>`, `<footer>`) to ensure content is structured logically for screen readers and assistive technologies.
+
+![Semantic](static/images/semantic.png)
+  
+- **ARIA Labels:** ARIA (Accessible Rich Internet Applications) attributes were added to key interactive elements where additional context was needed, improving the navigation experience for users relying on screen readers.
+
+  ![Aria Labels](static/images/aria.png)
+
+
+- **Keyboard Navigation:**
+  - All interactive elements (buttons, links, forms) are fully accessible via keyboard alone.
+  - Focus indicators (`:focus-visible`) are clearly visible, helping users understand where they are on the page.
+  ![Keyboard Navigations](static/images/keyboard.png)
+  
+- **CSS for Accessibility:**
+  - Accessible `line-height` and `text-wrap` properties have been applied for better readability.
+  - Form controls inherit fonts correctly to maintain consistency across different devices and user settings.
+  - Media elements (images, videos, etc.) have responsive defaults and are styled to avoid overflow issues.
+
+- **Alt Text for Images:** All images include appropriate `alt` text to describe content where necessary.
+
+- **Color Contrast:** I made a conscious effort to ensure good color contrast between background and foreground elements, adhering to WCAG 2.1 guidelines wherever possible.
+
+- **Responsive Design:**
+  - The layout adapts effectively across screen sizes.
+  - Text size and element spacing are designed to remain legible without requiring zoom.
+
+- **Accessability via browsers:**
+
+![WAVE Test](static/images/wave.png)
+- For Chrome devtools accessability tests goto [TESTING.md](TESTING.md)
+
+This ensures that the application is inclusive and provides a usable experience for a wider audience.
+
 ## Features
 
 ### MVP Features
