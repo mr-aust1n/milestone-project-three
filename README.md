@@ -45,8 +45,6 @@ All wireframes were created using adobe illustrator and can be found
 ![Mobile Nav Layout](static/images/nav.png)
 
 
-
-
 ## Database Schema
 
 The application uses SQLAlchemy ORM to manage a relational database. It includes three primary models:
@@ -146,6 +144,65 @@ This ensures that the application is inclusive and provides a usable experience 
 ### User Roles
 - **Regular Users**: Can log in and create/view their own tickets.
 - **Admins**: Can view all tickets, assign users, change statuses, and delete tickets.
+
+## Data Model Justification
+
+- The data model was designed to reflect real-world technical support workflows. Users can submit tickets and view updates, while admins can update statuses and add notes. Each update is stored in a log to ensure transparency and accountability.
+
+- A User can submit multiple Tickets.
+- A Ticket tracks its status, description, and is linked to a User.
+- All ticket updates (like status changes, admin responses) are stored in ActivityLogs.
+- This structure ensures full CRUD capability, supports real-time feedback, and provides a scalable foundation for future features (e.g., ticket assignment, priority levels, threaded comments).
+
+ [Database Schema](static/images/database_schema.png)
+
+
+## Usable Relational Database
+
+The data model was developed into a fully usable relational database using **SQLAlchemy ORM** with **PostgreSQL** as the production database and **SQLite** for local development.
+
+### Technologies Used
+- **SQLAlchemy**: Object Relational Mapper (ORM) to handle database models and operations.
+- **SQLite**: Lightweight relational database used during local development.
+- **PostgreSQL**: Production-grade relational database used on Heroku.
+- **Flask-SQLAlchemy**: Flask extension that integrates SQLAlchemy smoothly with the Flask application.
+
+### Database Setup and Configuration
+- In local development, the database defaults to SQLite (`sqlite:///instance/support_db.db`).
+- In production (deployed on Heroku), environment variables configure a PostgreSQL database connection securely using `psycopg2-binary`.
+- `python-dotenv` is used to manage sensitive credentials (e.g., database URLs) via a `.env` file during local development.
+
+### Table Structure
+The database contains three primary tables:
+
+- **User Table**: Stores user authentication details and roles (admin/user).
+- **Ticket Table**: Stores ticket submissions, categories, status, and user references.
+- **ActivityLog Table**: Stores action logs related to ticket updates and user activity.
+
+Each table was designed to:
+- Ensure **data integrity** through primary keys and foreign keys.
+- Support **1-to-many relationships** (e.g., a user can have multiple tickets).
+- Allow **consistent and structured data storage**.
+- Provide **full CRUD (Create, Read, Update, Delete)** operations with minimal redundancy.
+
+### Data Consistency and Organisation
+- Fields use appropriate data types (e.g., `String`, `Text`, `DateTime`).
+- Default values are used where applicable (e.g., `created_at` timestamps).
+- Relationships are clearly defined to maintain data consistency (e.g., ticket status linked to users and tickets).
+- Cascading rules (e.g., `delete-orphan`) are used in relationships to maintain referential integrity.
+
+### Scalability Considerations
+The database was structured to allow for future expansion, including:
+- Ticket assignment to staff members.
+- Ticket prioritisation and categorisation.
+- Additional activity types in the `ActivityLog`.
+- User role management (admin vs. regular users).
+
+[Database](static/images/database.png)
+
+## Database Configuration Management
+
+All database configuration settings are maintained in a single `config.py` file. The application dynamically loads the database URI and related credentials from environment variables, ensuring no hardcoded values are present and allowing easy switching between local (SQLite) and production (PostgreSQL) databases.
 
 
 ## Testing
