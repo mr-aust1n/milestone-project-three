@@ -38,7 +38,13 @@ All wireframes were created using adobe illustrator and can be found
 - Minimal, clean layout for both users and admins.
 - Clear call-to-actions for creating and updating tickets.
 - Responsive design across mobile, tablet, and desktop.
-![Non User Authentication](static/images/SupportMockup.png)
+![Device Layout](static/images/SupportMockup.png)
+![Mobile Layout](static/images/mobile.png)
+![Tablet Layout](static/images/tablet.png)
+![Desktop Layout](static/images/desktop.png)
+![Mobile Nav Layout](static/images/nav.png)
+
+
 
 
 ## Database Schema
@@ -61,23 +67,27 @@ The database schema supports full Create, Read, Update, and Delete operations us
 User
  └── id (PK)
  └── email
- └── password
- └── role
- └── tickets (1-to-many)
+ └── password_hash
+ └── is_admin (Boolean)
+ └── tickets (1-to-many relationship to Ticket)
+ └── activity_logs (1-to-many relationship to ActivityLog)
 
 Ticket
  └── id (PK)
+ └── user_id (FK → User)
  └── category
  └── description
- └── priority
- └── created_at
- └── user_id (FK → User)
- └── status_id (FK → Status)
+ └── status (default: 'Submitted')
+ └── created_at (timestamp)
+ └── logs (1-to-many relationship to ActivityLog)
 
-Status
+ActivityLog
  └── id (PK)
- └── name
- └── tickets (1-to-many)
+ └── ticket_id (FK → Ticket)
+ └── user_id (FK → User)
+ └── action (e.g., "Created", "Updated", "Closed")
+ └── message (details of the action)
+ └── timestamp (timestamp)
  
 ### Visual ERD
 
