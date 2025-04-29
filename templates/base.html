@@ -16,7 +16,7 @@
     <a href="#main-content" class="visually-hidden-focusable" aria-label="Skip to main content">Skip to main content</a>
 
     <!-- Header & Navigation -->
-    <header role="banner" aria-label="Main site navigation">
+    <header aria-label="Main site navigation">
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <div class="container">
                 <a class="navbar-brand" href="{{ url_for('index') }}" aria-label="Go to homepage">Support Ticket</a>
@@ -27,7 +27,7 @@
 
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <!-- Primary navigation links -->
-                    <ul class="navbar-nav me-auto" role="navigation" aria-label="Primary site sections">
+                    <ul class="navbar-nav me-auto" aria-label="Primary site sections">
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('index') }}" aria-label="Home page">Home</a>
                         </li>
@@ -58,7 +58,7 @@
                     </ul>
 
                     <!-- Auth navigation links -->
-                    <ul class="navbar-nav ms-auto" role="navigation" aria-label="Authentication links">
+                    <ul class="navbar-nav ms-auto" aria-label="Authentication links">
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('logout') }}"
@@ -97,12 +97,12 @@
     {% endwith %}
 
     <!-- Main Page Content -->
-    <main id="main-content" class="container mt-4" role="main" aria-label="Main content area">
+    <main id="main-content" class="container mt-4" aria-label="Main content area">
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="text-center mt-4 py-3 border-top" role="contentinfo" aria-label="Site footer">
+    <footer class="text-center mt-4 py-3 border-top" aria-label="Site footer">
         <p>&copy; 2025 CraigAustin.</p>
     </footer>
 
