@@ -1,3 +1,16 @@
+## Table of Contents
+
+- [Accessibility Testing](#accessibility-testing)
+- [Manual Testing (Full Detail)](#manual-testing-full-detail)
+  - [User Authentication](#user-authentication)
+  - [Ticket Functionality](#ticket-functionality)
+  - [Navigation & Responsiveness](#navigation--responsiveness)
+- [Browser & Device Testing](#browser--device-testing)
+- [Known Bugs & Fixes](#known-bugs--fixes)
+- [Automated Testing](#automated-testing)
+- [💡 Suggestions for Future Improvements](#-suggestions-for-future-improvements)
+
+
 # TESTING.md – Craig Aust.in Support Ticket System
 
 This document outlines accessibility, manual testing, device/browser testing, known bugs, and suggestions for the CraigAust.in Support Ticket System.
