@@ -7,16 +7,15 @@
 - [Accessibility](#accessibility)
 - [Features](#features)
 - [Data Model Justification](#data-model-justification)
-- [Usable Relational Database](#usable-relational-database)
+- [Relational Database](#relational-database)
 - [Database Configuration Management](#database-configuration-management)
-- [Testing](#testing)
 - [Technologies Used](#technologies-used)
 - [Deployment](#deployment)
 - [Security Considerations](#security-considerations)
 - [File Structure](#file-structure-simplified)
 - [Credits](#credits)
 - [Future Improvements](#future-improvements)
-
+- [TESTING.md](TESTING.md)
 
 
 ## IT Ticket Tracker — Milestone 3 Project
@@ -223,10 +222,9 @@ This ensures that the application is inclusive and provides a usable experience 
 
  [Database Schema](static/images/database_schema.png)
 
+## Relational Database
 
-## Usable Relational Database
-
-The data model was developed into a fully usable relational database using **SQLAlchemy ORM** with **PostgreSQL** as the production database and **SQLite** for local development.
+The data model was developed into a fully relational database using **SQLAlchemy ORM** with **PostgreSQL** as the production database and **SQLite** for local development.
 
 ### Technologies Used
 - **SQLAlchemy**: Object Relational Mapper (ORM) to handle database models and operations.
@@ -272,10 +270,6 @@ The database was structured to allow for future expansion, including:
 All database configuration settings are maintained in a single `config.py` file. The application dynamically loads the database URI and related credentials from environment variables, ensuring no hardcoded values are present and allowing easy switching between local (SQLite) and production (PostgreSQL) databases.
 
 
-## Testing
-
-Testing was a mix of **manual** and **automated** methods:
-**Go to TESTING →** [TESTING.md](TESTING.md)
 
 ### Manual Tests
 - Form validation for all inputs (ticket submission, login, etc.)
@@ -380,13 +374,25 @@ Code quality and style were maintained throughout the project using two industry
 
 ## Deployment
 
-The application was deployed to **Heroku** using the following process:
+The application is deployed to **Heroku** using the following process:
 
-1. **Prepare the Application for Deployment**
-   - Created a `Procfile` to tell Heroku how to run the app.
-   - Ensured `requirements.txt` lists all required packages.
-   - Added a `runtime.txt` to specify the Python version.
-   - Confirmed that database URI fallback logic is included (`sqlite` locally, `PostgreSQL` on Heroku).
+1. **To run this project locally after pulling the repo:**
+   - In VS Code terminal, Create a virtual environment:
+
+   - macOS/Linux:
+   python3 -m venv venv
+   source venv/bin/activate
+   - Windows:
+   python -m venv venv
+   venv\Scripts\activate
+
+   - Install dependencies:
+   pip install -r requirements.txt
+   - Run the app: Make sure you are in the apps directory
+   - In terminal type  'source venv/bin/activate' to activate the env.  Now type ' python run.py;'
+   you should now see somthing like this and your application will be live on this port.
+   - [Flake8 Pass](static/images/environment.png)
+
 
 2. **Set Up the Heroku App**
    - Created a new application on the Heroku dashboard.

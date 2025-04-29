@@ -29,11 +29,24 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 
 ###  Ticket Functionality
 
-| Feature                        | Expected Result                                | Actual Result                        | Status |
-|--------------------------------|-------------------------------------------------|---------------------------------------|--------|
-| Submit ticket as user          | Ticket saved, appears in "My Tickets"          | ✅ As expected                        | ✅ Pass |
-| Admin views all tickets        | Admin dashboard shows all user submissions     | ✅ As expected                        | ✅ Pass |
-| Update ticket status (admin)   | Ticket status changes in list                  | ✅ As expected                        | ✅ Pass |
+| Feature                    | Expected Result                            | Actual Result      | Status     |
+|----------------------------|---------------------------------------------|--------------------|------------|
+| Submit ticket as user      | Ticket saved, appears in "My Tickets"       | ✅ As expected      | ✅ Pass     |
+| Admin views all tickets    | Admin dashboard shows all user submissions | ✅ As expected      | ✅ Pass     |
+| Update ticket category     | Ticket category updated successfully        | ✅ As expected      | ✅ Pass     |
+| Update ticket status       | Ticket status changes in list               | ✅ As expected      | ✅ Pass     |
+| Delete ticket (admin)      | Ticket removed from system                  | ✅ As expected      | ✅ Pass     |
+| Confirm delete prompt      | User sees confirmation message              | ✅ As expected      | ✅ Pass     |
+| Non-admin views only own   | Regular users cannot see others’ tickets    | ✅ As expected      | ✅ Pass     |
+| Admin dashboard restricted | Only admins can access admin dashboard      | ✅ As expected      | ✅ Pass     |
+| Pagination on ticket list  | Multiple pages shown if ticket list is long | ✅ As expected      | ✅ Pass     |
+
+![Create Submit](static/images/submit.png)
+![Read Ticket](static/images/read.png)
+![Update Ticket](static/images/updated.png)
+![Delete Ticket](static/images/deleted.png)
+![Delete Sure?](static/images/sure.png)
+
 
 ### Navigation & Responsiveness
 
@@ -44,8 +57,14 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 | Mobile responsiveness          | Layout adjusts cleanly on small screens        | ✅ As expected                        | ✅ Pass |
 | Contrast on backgrounds        | Inputs and placeholders readable               | ✅ As expected                        | ✅ Pass |
 
-![Responsive Navbar](static/images/burger.png)
-![Ticket Submit](static/images/submit.png)
+![Device Layout](static/images/SupportMockup.png)
+![Mobile Layout](static/images/mobile.png)
+![Tablet Layout](static/images/tablet.png)
+![Desktop Layout](static/images/desktop.png)
+![Mobile Nav Layout](static/images/nav.png)
+
+
+
 
 ---
 

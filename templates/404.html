@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found{% endblock %}
+
+{% block content %}
+<main role="main" class="container text-center py-5" aria-labelledby="error-title">
+    <section>
+        <h1 id="error-title" class="display-1">404</h1>
+        <p class="lead" aria-label="Page not found description">
+            Sorry, the page you’re looking for doesn’t exist.
+        </p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary mt-4" role="button" aria-label="Return to homepage">
+            Return to Homepage
+        </a>
+    </section>
+</main>
+{% endblock %}

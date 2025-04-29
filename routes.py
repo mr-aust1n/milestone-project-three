@@ -344,6 +344,15 @@ def forgot_password():
     return render_template("forgot_password.html")
 
 
+
+@app.errorhandler(404)
+def not_found_error(error):
+    print("404 triggered")
+    return render_template("404.html"), 404
+
+
+
+
 @app.route("/dashboard")
 @login_required
 def dashboard():
