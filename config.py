@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY")
 
@@ -16,7 +15,9 @@ class Config:
         )
 
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    DEBUG = os.getenv("FLASK_ENV") != "production"
+
+    # Correct debug setting
+    DEBUG = os.getenv("FLASK_DEBUG", "0") == "1"
 
     MAILGUN_API_KEY = os.getenv("MAILGUN_API_KEY")
     MAILGUN_DOMAIN = os.getenv("MAILGUN_DOMAIN")

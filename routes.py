@@ -347,7 +347,6 @@ def forgot_password():
 
 @app.errorhandler(404)
 def not_found_error(error):
-    print("404 triggered")
     return render_template("404.html"), 404
 
 
