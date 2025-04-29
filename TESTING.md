@@ -27,6 +27,21 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 ![WAVE Test](static/images/wave.png)
 ![Lighthouse Test](static/images/lighthouse.png)
 
+
+- W3 Schools Validator
+
+![Home Test](static/images/home.png)
+![About](static/images/about.png)
+![Admin Tickets Test](static/images/adminTickets.png)
+![Dashboard Test](static/images/dashboard.png)
+![Edit Ticket Test](static/images/editTicket.png)
+![Forgot Password Test](static/images/passwordReset.png.png)
+![Login Test](static/images/login.png)
+![Register Test](static/images/register.png)
+![Submit Ticket Test](static/images/submitTicket.png)
+![Ticket Test](static/images/tickets.png)
+
+
 ---
 
 ## Manual Testing (Full Detail)
