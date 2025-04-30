@@ -157,6 +157,35 @@ ActivityLog
 
 ---
 
+## User Stories
+
+Below are the user stories that guided the development of this full stack web application:
+
+1. **Account Creation and Login**  
+   As a new user, I want to register for an account and securely log in, so that I can access the full features of the application and manage my own data.
+
+2. **CRUD Functionality**  
+   As a logged-in user, I want to create, view, update, and delete support tickets, so that I can manage my submissions efficiently.
+
+3. **Real-Time Feedback and Validation**  
+   As a user filling out forms, I want to see immediate feedback for errors or confirmations, so that I know my actions are being processed correctly.
+
+4. **Responsive and Accessible Design**  
+   As a mobile or screen reader user, I want to navigate the application easily, so that I can interact with the site regardless of my device or ability.
+
+5. **Admin-Level Access**  
+   As an admin, I want to manage user roles and oversee records, so that I can ensure the system runs smoothly and securely.
+
+6. **Data Persistence**  
+   As a user, I want to have my submitted data stored securely in a database, so that I can retrieve or update it later.
+
+7. **Error and Success Notifications**  
+   As a user, I want to receive clear messages when an action succeeds or fails, so that I know what happened and what to do next.
+
+8. **Deployment Access**  
+   As a user, I want to access the application online without installing anything, so that I can use it from any device.
+ ---
+
 ## Accessibility
 
 Accessibility was a core consideration throughout the design and development of this project to ensure that it is usable by as many people as possible, including users with disabilities.
