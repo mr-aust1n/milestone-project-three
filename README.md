@@ -126,30 +126,9 @@ The database schema supports full Create, Read, Update, and Delete operations us
 
 ### Entity Relationships
 
-User
- └── id (PK)
- └── email
- └── password_hash
- └── is_admin (Boolean)
- └── tickets (1-to-many relationship to Ticket)
- └── activity_logs (1-to-many relationship to ActivityLog)
+ [Entity Relationships Diagram](static/images/EntityRelationships.png)
 
-Ticket
- └── id (PK)
- └── user_id (FK → User)
- └── category
- └── description
- └── status (default: 'Submitted')
- └── created_at (timestamp)
- └── logs (1-to-many relationship to ActivityLog)
-
-ActivityLog
- └── id (PK)
- └── ticket_id (FK → Ticket)
- └── user_id (FK → User)
- └── action (e.g., "Created", "Updated", "Closed")
- └── message (details of the action)
- └── timestamp (timestamp)
+ 
  
 ### Visual ERD
 
