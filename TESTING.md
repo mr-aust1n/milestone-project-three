@@ -49,7 +49,7 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 - W3 Schools Validator - FAIL
 
 ![Home Test - PASS](static/images/home1.png)
-![About - PASS](static/images/about.png)
+![About - PASS](static/images/about1.png)
 ![Admin Tickets Test - PASS](static/images/adminTickets.png)
 ![Dashboard Test - PASS](static/images/dashboard.png)
 ![Edit Ticket Test - PASS](static/images/editTicket.png)
