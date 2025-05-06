@@ -4,10 +4,10 @@
 
 {% block content %}
 <!-- Skip link for accessibility -->
-<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+<a href="#home-content" class="visually-hidden-focusable">Skip to main content</a>
 
-<main id="main-content" class="container" aria-labelledby="main-heading">
-    <!-- Visually hidden heading for screen readers -->
+<section id="home-content" class="container" aria-labelledby="main-heading">
+    <!-- Visually hidden heading for accessibility -->
     <h2 id="main-heading" class="visually-hidden">Main Content</h2>
 
     <!-- Hero Section -->
@@ -60,5 +60,6 @@
         <a href="{{ url_for('register') }}" class="btn btn-success btn-lg"
             aria-label="Sign up for your free account">Sign Up Free</a>
     </section>
-</main>
+
+</section>
 {% endblock %}
