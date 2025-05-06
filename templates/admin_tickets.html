@@ -7,7 +7,6 @@
 <a href="#admin-main" class="visually-hidden-focusable">Skip to main content</a>
 
 <section id="admin-main" class="container" aria-labelledby="admin-heading">
-    <!-- Hidden heading for accessibility -->
     <h2 id="admin-heading" class="visually-hidden">Admin Support Ticket Management</h2>
 
     <div class="row justify-content-center">
@@ -32,7 +31,7 @@
             {% if tickets %}
             <!-- Filter/Search Form -->
             <section aria-labelledby="filter-heading" class="mb-4">
-                <h3 id="filter-heading" class="visually-hidden">Filter and Search Tickets</h3>
+                <h3 id="filter-heading" class="visually-hidden">Ticket Search and Filter</h3>
                 <form method="GET" action="{{ url_for('admin_tickets') }}" class="row g-2" role="search"
                     aria-label="Ticket Search and Filter">
                     <div class="col-md-6">
@@ -61,92 +60,95 @@
             </section>
 
             <!-- Tickets Table -->
-            <section class="table-responsive" role="region" aria-labelledby="tickets-table-heading">
-                <h3 id="tickets-table-heading" class="visually-hidden">List of Support Tickets</h3>
-                <table class="table align-middle table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col" class="d-none d-sm-table-cell">User</th>
-                            <th scope="col">Category</th>
-                            <th scope="col">Description</th>
-                            <th scope="col">Status</th>
-                            <th scope="col">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for ticket in tickets %}
-                        <tr>
-                            <td>{{ ticket.id }}</td>
-                            <td class="d-none d-sm-table-cell">{{ ticket.user.email }}</td>
-                            <td>{{ ticket.category }}</td>
-                            <td>{{ ticket.description }}</td>
-                            <td>
-                                {% if ticket.status == "Submitted" %}
-                                <span class="badge bg-secondary"
-                                    aria-label="Ticket status is Submitted">Submitted</span>
-                                {% elif ticket.status == "In Progress" %}
-                                <span class="badge bg-info text-dark" aria-label="Ticket status is In Progress">In
-                                    Progress</span>
-                                {% elif ticket.status == "On Hold" %}
-                                <span class="badge bg-warning text-dark" aria-label="Ticket status is On Hold">On
-                                    Hold</span>
-                                {% elif ticket.status == "Done" %}
-                                <span class="badge bg-success" aria-label="Ticket status is Done">Done</span>
-                                {% else %}
-                                <span class="badge bg-light text-dark"
-                                    aria-label="Ticket status is {{ ticket.status }}">{{ ticket.status }}</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <!-- Status Dropdown -->
-                                <form action="{{ url_for('update_status', ticket_id=ticket.id) }}" method="POST"
-                                    class="d-inline" aria-label="Change ticket status for ticket {{ ticket.id }}">
-                                    <label for="status-select-{{ ticket.id }}" class="visually-hidden">Change
-                                        status</label>
-                                    <select id="status-select-{{ ticket.id }}" name="status"
-                                        onchange="this.form.submit()"
-                                        class="form-select form-select-sm d-inline w-auto">
-                                        <option value="Submitted" {% if ticket.status=="Submitted" %}selected{% endif
-                                            %}>Submitted</option>
-                                        <option value="In Progress" {% if ticket.status=="In Progress" %}selected{%
-                                            endif %}>In Progress</option>
-                                        <option value="On Hold" {% if ticket.status=="On Hold" %}selected{% endif %}>On
-                                            Hold</option>
-                                        <option value="Done" {% if ticket.status=="Done" %}selected{% endif %}>Done
-                                        </option>
-                                    </select>
-                                </form>
-
-                                <!-- Delete Button -->
-                                <form action="{{ url_for('delete_ticket', ticket_id=ticket.id) }}" method="POST"
-                                    class="d-inline"
-                                    onsubmit="return confirm('Are you sure you want to delete this ticket?');"
-                                    aria-label="Delete ticket {{ ticket.id }}">
-                                    <button type="submit" class="btn btn-danger btn-sm ms-1">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
-
-                        <!-- Activity Log Row -->
-                        <tr>
-                            <td colspan="6" class="bg-light" aria-label="Activity history for ticket {{ ticket.id }}">
-                                <strong>History:</strong>
-                                <ul class="mb-1" aria-label="Activity log for ticket {{ ticket.id }}">
-                                    {% for log in ticket.logs %}
-                                    <li style="font-size: 0.9em;">
-                                        [{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}] {{ log.user.email }} — {{
-                                        log.message }}
-                                    </li>
+            <section aria-labelledby="tickets-heading">
+                <h3 id="tickets-heading" class="visually-hidden">List of Support Tickets</h3>
+                <div class="table-responsive" role="region" aria-label="List of Support Tickets">
+                    <table class="table align-middle table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col" class="d-none d-sm-table-cell">User</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ticket in tickets %}
+                            <tr>
+                                <td>{{ ticket.id }}</td>
+                                <td class="d-none d-sm-table-cell">{{ ticket.user.email }}</td>
+                                <td>{{ ticket.category }}</td>
+                                <td>{{ ticket.description }}</td>
+                                <td>
+                                    {% if ticket.status == "Submitted" %}
+                                    <span class="badge bg-secondary"
+                                        aria-label="Ticket status is Submitted">Submitted</span>
+                                    {% elif ticket.status == "In Progress" %}
+                                    <span class="badge bg-info text-dark" aria-label="Ticket status is In Progress">In
+                                        Progress</span>
+                                    {% elif ticket.status == "On Hold" %}
+                                    <span class="badge bg-warning text-dark" aria-label="Ticket status is On Hold">On
+                                        Hold</span>
+                                    {% elif ticket.status == "Done" %}
+                                    <span class="badge bg-success" aria-label="Ticket status is Done">Done</span>
                                     {% else %}
-                                    <li>No activity yet.</li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                    <span class="badge bg-light text-dark"
+                                        aria-label="Ticket status is {{ ticket.status }}">{{ ticket.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <!-- Status Dropdown -->
+                                    <form action="{{ url_for('update_status', ticket_id=ticket.id) }}" method="POST"
+                                        class="d-inline" aria-label="Change ticket status for ticket {{ ticket.id }}">
+                                        <label for="status-select-{{ ticket.id }}" class="visually-hidden">Change
+                                            status</label>
+                                        <select id="status-select-{{ ticket.id }}" name="status"
+                                            onchange="this.form.submit()"
+                                            class="form-select form-select-sm d-inline w-auto">
+                                            <option value="Submitted" {% if ticket.status=="Submitted" %}selected{%
+                                                endif %}>Submitted</option>
+                                            <option value="In Progress" {% if ticket.status=="In Progress" %}selected{%
+                                                endif %}>In Progress</option>
+                                            <option value="On Hold" {% if ticket.status=="On Hold" %}selected{% endif
+                                                %}>On Hold</option>
+                                            <option value="Done" {% if ticket.status=="Done" %}selected{% endif %}>Done
+                                            </option>
+                                        </select>
+                                    </form>
+
+                                    <!-- Delete Button -->
+                                    <form action="{{ url_for('delete_ticket', ticket_id=ticket.id) }}" method="POST"
+                                        class="d-inline"
+                                        onsubmit="return confirm('Are you sure you want to delete this ticket?');"
+                                        aria-label="Delete ticket {{ ticket.id }}">
+                                        <button type="submit" class="btn btn-danger btn-sm ms-1">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+
+                            <!-- Activity Log Row -->
+                            <tr>
+                                <td colspan="6" class="bg-light"
+                                    aria-label="Activity history for ticket {{ ticket.id }}">
+                                    <strong>History:</strong>
+                                    <ul class="mb-1" aria-label="Activity log for ticket {{ ticket.id }}">
+                                        {% for log in ticket.logs %}
+                                        <li style="font-size: 0.9em;">
+                                            [{{ log.timestamp.strftime('%Y-%m-%d %H:%M') }}] {{ log.user.email }} — {{
+                                            log.message }}
+                                        </li>
+                                        {% else %}
+                                        <li>No activity yet.</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- Pagination -->
