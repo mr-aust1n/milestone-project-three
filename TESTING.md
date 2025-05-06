@@ -30,6 +30,8 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 
 - W3 Schools Validator
 
+![W3 Schools](https://validator.w3.org/nu/?doc=https%3A%2F%2Fmilestone-support-tickets-67fbfa276455.herokuapp.com%2F)
+
 ![Home Test](static/images/home.png)
 ![About](static/images/about.png)
 ![Admin Tickets Test](static/images/adminTickets.png)
