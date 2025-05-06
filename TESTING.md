@@ -32,17 +32,32 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 
 ![W3 Schools](https://validator.w3.org/nu/?doc=https%3A%2F%2Fmilestone-support-tickets-67fbfa276455.herokuapp.com%2F)
 
-![Home Test](static/images/home.png)
-![About](static/images/about.png)
-![Admin Tickets Test](static/images/adminTickets.png)
-![Dashboard Test](static/images/dashboard.png)
-![Edit Ticket Test](static/images/editTicket.png)
-![Forgot Password Test](static/images/passwordReset.png.png)
-![Login Test](static/images/login.png)
-![Register Test](static/images/register.png)
-![Submit Ticket Test](static/images/submitTicket.png)
-![Ticket Test](static/images/tickets.png)
+- W3 Schools Validator - FAIL
 
+![Home Test - FAIL](static/images/home.png)
+![About - FAIL](static/images/about.png)
+![Admin Tickets Test  - FAIL](static/images/adminTickets.png)
+![Dashboard Test - FAIL](static/images/dashboard.png)
+![Edit Ticket Test - FAIL](static/images/editTicket.png)
+![Forgot Password Test - FAIL](static/images/passwordReset.png.png)
+![Login Test - FAIL](static/images/login.png)
+![Register Test - FAIL](static/images/register.png)
+![Submit Ticket Test - FAIL](static/images/submitTicket.png)
+![Ticket Test - FAIL](static/images/tickets.png)
+
+
+- W3 Schools Validator - FAIL
+
+![Home Test - PASS](static/images/home1.png)
+![About - PASS](static/images/about.png)
+![Admin Tickets Test - PASS](static/images/adminTickets.png)
+![Dashboard Test - PASS](static/images/dashboard.png)
+![Edit Ticket Test - PASS](static/images/editTicket.png)
+![Forgot Password Test - PASS](static/images/passwordReset.png.png)
+![Login Test - PASS](static/images/login.png)
+![Register Test - PASS](static/images/register.png)
+![Submit Ticket Test - PASS](static/images/submitTicket.png)
+![Ticket Test - PASS](static/images/tickets.png)
 
 ---
 

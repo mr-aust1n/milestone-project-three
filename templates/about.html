@@ -4,15 +4,17 @@
 
 {% block content %}
 <!-- Skip link for screen readers -->
-<a href="#about-content" class="visually-hidden-focusable">Skip to main content</a>
+<a href="#about-main" class="visually-hidden-focusable">Skip to main content</a>
 
-<section id="about-content" class="container">
+<section id="about-main" class="container" aria-labelledby="about-heading">
+    <!-- Visually hidden heading for screen readers -->
+    <h2 id="about-heading" class="visually-hidden">About CraigAust.in Support</h2>
 
     <!-- Hero Intro -->
     <section class="py-5" aria-labelledby="hero-heading">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
-                <h1 id="hero-heading" class="display-5 fw-bold">Your Go-To Business Support Platform</h1>
+                <h2 id="hero-heading" class="display-5 fw-bold">Your Go-To Business Support Platform</h2>
                 <p class="lead">We help business owners stay focused by taking care of the tech, admin, and digital
                     noise.</p>
             </div>
@@ -26,44 +28,34 @@
     <!-- What We Support -->
     <section class="py-5 bg-light" aria-labelledby="support-heading">
         <div class="text-center mb-5">
-            <h2 id="support-heading" class="fw-bold">What We Support</h2>
+            <h3 id="support-heading" class="fw-bold">What We Support</h3>
             <p class="text-muted">We provide hands-on help with the tools and platforms your business relies on:</p>
         </div>
         <div class="row text-center" role="list" aria-label="Support Services List">
+            <!-- Each item -->
+            {% for item in [
+            ("Social Media Support", "Help with scheduling, content creation, hashtags, and post management across
+            platforms."),
+            ("QuickBooks & Financial Setup", "Support with QuickBooks setup, usage, troubleshooting, and small business
+            accounting."),
+            ("Email & Microsoft 365", "Setup and support for email accounts, signatures, Microsoft 365 and syncing
+            across devices."),
+            ("The Access Group", "Help navigating and using Access Group systems (e.g. Access Care Planning)."),
+            ("Website Support", "Assistance with updates, WordPress issues, domain setup and basic SEO."),
+            ("General Tech Help", "Support for everyday tech challenges that slow your business down.")
+            ] %}
             <div class="col-md-4 mb-4" role="listitem">
-                <h5 class="fw-semibold">Social Media Support</h5>
-                <p class="text-muted">Help with scheduling, content creation, hashtags, and post management across
-                    platforms.</p>
+                <h5 class="fw-semibold">{{ item[0] }}</h5>
+                <p class="text-muted">{{ item[1] }}</p>
             </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <h5 class="fw-semibold">QuickBooks & Financial Setup</h5>
-                <p class="text-muted">Support with QuickBooks setup, usage, troubleshooting, and small business
-                    accounting.</p>
-            </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <h5 class="fw-semibold">Email & Microsoft 365</h5>
-                <p class="text-muted">Setup and support for email accounts, signatures, Microsoft 365 and syncing across
-                    devices.</p>
-            </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <h5 class="fw-semibold">The Access Group</h5>
-                <p class="text-muted">Help navigating and using Access Group systems (e.g. Access Care Planning).</p>
-            </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <h5 class="fw-semibold">Website Support</h5>
-                <p class="text-muted">Assistance with updates, WordPress issues, domain setup and basic SEO.</p>
-            </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <h5 class="fw-semibold">General Tech Help</h5>
-                <p class="text-muted">Support for everyday tech challenges that slow your business down.</p>
-            </div>
+            {% endfor %}
         </div>
     </section>
 
     <!-- Pricing -->
     <section class="py-5" aria-labelledby="pricing-heading">
         <div class="text-center mb-5">
-            <h2 id="pricing-heading" class="fw-bold">Flexible Pricing</h2>
+            <h3 id="pricing-heading" class="fw-bold">Flexible Pricing</h3>
             <p class="text-muted">Simple support packages for businesses of all sizes.</p>
         </div>
         <div class="row text-center" role="list" aria-label="Pricing Plans">
@@ -116,7 +108,7 @@
 
     <!-- CTA Section -->
     <section class="py-5 text-center" aria-labelledby="cta-heading">
-        <h2 id="cta-heading" class="fw-bold mb-3">Let’s Make Things Easier</h2>
+        <h3 id="cta-heading" class="fw-bold mb-3">Let’s Make Things Easier</h3>
         <p class="text-muted mb-4">Reach out to us for anything that’s slowing your business down. We’re ready to help.
         </p>
         <a href="{{ url_for('submit_ticket') }}" class="btn btn-primary btn-lg"
