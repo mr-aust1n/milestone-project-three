@@ -5,59 +5,61 @@
 {% block content %}
 <!-- Skip link for accessibility -->
 <a href="#index-content" class="visually-hidden-focusable">Skip to main content</a>
+<section id="index-content" class="container" aria-labelledby="main-heading">
+    <h2 id="main-heading" class="visually-hidden">Main Content</h2>
 
-<section id="index-content" class="container">
+    <section id="index-content" class="container">
 
-    <!-- Hero Section -->
-    <section class="py-5 text-center" aria-labelledby="hero-heading">
-        <div class="row align-items-center">
-            <div class="col-md-6 mb-4 mb-md-0">
-                <h2 id="hero-heading" class="display-4 fw-bold">Support That Empowers</h2>
-                <p class="lead">Submit, manage, and resolve support tickets effortlessly.</p>
-                <a href="{{ url_for('submit_ticket') }}" class="btn btn-primary btn-lg mt-3"
-                    aria-label="Start a Support Request Now">Get Started</a>
+        <!-- Hero Section -->
+        <section class="py-5 text-center" aria-labelledby="hero-heading">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <h2 id="hero-heading" class="display-4 fw-bold">Support That Empowers</h2>
+                    <p class="lead">Submit, manage, and resolve support tickets effortlessly.</p>
+                    <a href="{{ url_for('submit_ticket') }}" class="btn btn-primary btn-lg mt-3"
+                        aria-label="Start a Support Request Now">Get Started</a>
+                </div>
+                <div class="col-md-6">
+                    <img src="{{ url_for('static', filename='images/lady-with-laptop.png') }}"
+                        alt="Illustration of a woman working on a laptop" class="img-fluid">
+                </div>
             </div>
-            <div class="col-md-6">
-                <img src="{{ url_for('static', filename='images/lady-with-laptop.png') }}"
-                    alt="Illustration of a woman working on a laptop" class="img-fluid">
+        </section>
+
+        <!-- Features Section -->
+        <section class="py-5 bg-light" aria-labelledby="features-heading">
+            <div class="text-center mb-5">
+                <h3 id="features-heading" class="fw-bold">Why Choose CraigAust.in as your Support Platform?</h3>
+                <p class="text-muted">Built for speed, simplicity, and collaboration.</p>
             </div>
-        </div>
+            <div class="row text-center" role="list" aria-label="Feature Highlights">
+                <div class="col-md-4 mb-4" role="listitem">
+                    <img src="{{ url_for('static', filename='images/man-working.png') }}"
+                        alt="Man sending emails on a laptop" class="img-fluid mb-3">
+                    <h5 class="fw-semibold">Fast Ticket Creation</h5>
+                    <p class="text-muted">Open a ticket in seconds and keep your issues organized from the start.</p>
+                </div>
+                <div class="col-md-4 mb-4" role="listitem">
+                    <img src="{{ url_for('static', filename='images/music-lady.png') }}"
+                        alt="Woman with headphones focused at her laptop" class="img-fluid mb-3">
+                    <h5 class="fw-semibold">Real-Time Updates</h5>
+                    <p class="text-muted">Track progress and updates on your tickets in real time.</p>
+                </div>
+                <div class="col-md-4 mb-4" role="listitem">
+                    <img src="{{ url_for('static', filename='images/man-working-laptop.png') }}"
+                        alt="Man working on technical support tasks" class="img-fluid mb-3">
+                    <h5 class="fw-semibold">Collaborative Support</h5>
+                    <p class="text-muted">Seamlessly work with your team to resolve customer queries faster.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="py-5 text-center" aria-labelledby="cta-heading">
+            <h3 id="cta-heading" class="fw-bold mb-3">Ready to simplify your support process?</h3>
+            <a href="{{ url_for('register') }}" class="btn btn-success btn-lg"
+                aria-label="Sign up for your free account">Sign Up Free</a>
+        </section>
+
     </section>
-
-    <!-- Features Section -->
-    <section class="py-5 bg-light" aria-labelledby="features-heading">
-        <div class="text-center mb-5">
-            <h3 id="features-heading" class="fw-bold">Why Choose CraigAust.in as your Support Platform?</h3>
-            <p class="text-muted">Built for speed, simplicity, and collaboration.</p>
-        </div>
-        <div class="row text-center" role="list" aria-label="Feature Highlights">
-            <div class="col-md-4 mb-4" role="listitem">
-                <img src="{{ url_for('static', filename='images/man-working.png') }}"
-                    alt="Man sending emails on a laptop" class="img-fluid mb-3">
-                <h5 class="fw-semibold">Fast Ticket Creation</h5>
-                <p class="text-muted">Open a ticket in seconds and keep your issues organized from the start.</p>
-            </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <img src="{{ url_for('static', filename='images/music-lady.png') }}"
-                    alt="Woman with headphones focused at her laptop" class="img-fluid mb-3">
-                <h5 class="fw-semibold">Real-Time Updates</h5>
-                <p class="text-muted">Track progress and updates on your tickets in real time.</p>
-            </div>
-            <div class="col-md-4 mb-4" role="listitem">
-                <img src="{{ url_for('static', filename='images/man-working-laptop.png') }}"
-                    alt="Man working on technical support tasks" class="img-fluid mb-3">
-                <h5 class="fw-semibold">Collaborative Support</h5>
-                <p class="text-muted">Seamlessly work with your team to resolve customer queries faster.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Call to Action Section -->
-    <section class="py-5 text-center" aria-labelledby="cta-heading">
-        <h3 id="cta-heading" class="fw-bold mb-3">Ready to simplify your support process?</h3>
-        <a href="{{ url_for('register') }}" class="btn btn-success btn-lg"
-            aria-label="Sign up for your free account">Sign Up Free</a>
-    </section>
-
-</section>
-{% endblock %}
+    {% endblock %}
