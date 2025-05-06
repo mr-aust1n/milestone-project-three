@@ -31,34 +31,38 @@
 
             {% if tickets %}
             <!-- Filter/Search Form -->
-            <form method="GET" action="{{ url_for('admin_tickets') }}" class="row g-2 mb-4" role="search"
-                aria-label="Ticket Search and Filter">
-                <div class="col-md-6">
-                    <label for="search-input" class="visually-hidden">Search tickets</label>
-                    <input type="text" id="search-input" name="search" placeholder="Search tickets..."
-                        class="form-control" value="{{ request.args.get('search', '') }}">
-                </div>
-                <div class="col-md-4">
-                    <label for="status_filter" class="visually-hidden">Filter by status</label>
-                    <select id="status_filter" name="status_filter" class="form-select">
-                        <option value="">All Statuses</option>
-                        <option value="Submitted" {% if request.args.get('status_filter')=="Submitted" %}selected{%
-                            endif %}>Submitted</option>
-                        <option value="In Progress" {% if request.args.get('status_filter')=="In Progress" %}selected{%
-                            endif %}>In Progress</option>
-                        <option value="On Hold" {% if request.args.get('status_filter')=="On Hold" %}selected{% endif
-                            %}>On Hold</option>
-                        <option value="Done" {% if request.args.get('status_filter')=="Done" %}selected{% endif %}>Done
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Search</button>
-                </div>
-            </form>
+            <section aria-labelledby="filter-heading" class="mb-4">
+                <h3 id="filter-heading" class="visually-hidden">Filter and Search Tickets</h3>
+                <form method="GET" action="{{ url_for('admin_tickets') }}" class="row g-2" role="search"
+                    aria-label="Ticket Search and Filter">
+                    <div class="col-md-6">
+                        <label for="search-input" class="visually-hidden">Search tickets</label>
+                        <input type="text" id="search-input" name="search" placeholder="Search tickets..."
+                            class="form-control" value="{{ request.args.get('search', '') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label for="status_filter" class="visually-hidden">Filter by status</label>
+                        <select id="status_filter" name="status_filter" class="form-select">
+                            <option value="">All Statuses</option>
+                            <option value="Submitted" {% if request.args.get('status_filter')=="Submitted" %}selected{%
+                                endif %}>Submitted</option>
+                            <option value="In Progress" {% if request.args.get('status_filter')=="In Progress"
+                                %}selected{% endif %}>In Progress</option>
+                            <option value="On Hold" {% if request.args.get('status_filter')=="On Hold" %}selected{%
+                                endif %}>On Hold</option>
+                            <option value="Done" {% if request.args.get('status_filter')=="Done" %}selected{% endif %}>
+                                Done</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                    </div>
+                </form>
+            </section>
 
             <!-- Tickets Table -->
-            <div class="table-responsive" role="region" aria-label="List of Support Tickets">
+            <section class="table-responsive" role="region" aria-labelledby="tickets-table-heading">
+                <h3 id="tickets-table-heading" class="visually-hidden">List of Support Tickets</h3>
                 <table class="table align-middle table-bordered">
                     <thead class="table-light">
                         <tr>
@@ -143,7 +147,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
+            </section>
 
             <!-- Pagination -->
             <nav aria-label="Ticket pagination" class="pagination-container">
