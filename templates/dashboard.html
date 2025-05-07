@@ -1,170 +1,44 @@
 {% extends 'base.html' %}
 
-{% block title %}Dashboard{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
-<section aria-labelledby="dashboard-heading">
-    <h2 id="dashboard-heading">Ticket Dashboard</h2>
+<!-- Skip link -->
+<a href="#login-main" class="visually-hidden-focusable">Skip to main content</a>
 
-    <!-- Status Badge Legend -->
-    <section aria-labelledby="status-legend" class="mb-4">
-        <h3 id="status-legend" class="visually-hidden">Ticket status color legend</h3>
-        <p>
-            <strong>Status Legend:</strong>
-            <span class="badge bg-secondary" aria-label="Submitted ticket">Submitted</span>
-            <span class="badge bg-info text-dark" aria-label="In progress ticket">In Progress</span>
-            <span class="badge bg-warning text-dark" aria-label="On hold ticket">On Hold</span>
-            <span class="badge bg-success" aria-label="Completed ticket">Done</span>
-        </p>
-    </section>
+<!-- Main Login Section -->
+<section id="login-main" class="container mt-5" aria-labelledby="login-heading">
+    <h2 id="login-heading" class="visually-hidden">Login Section</h2>
 
-    <!-- Date Filter -->
-    <section aria-labelledby="date-filter" class="mb-4">
-        <h3 id="date-filter" class="visually-hidden">Filter by date range</h3>
-        <form method="GET" class="row g-3 align-items-end" role="search" aria-label="Date range filter for charts">
-            <div class="col-auto">
-                <label for="start_date" class="form-label">From:</label>
-                <input type="date" name="start_date" id="start_date" class="form-control"
-                    value="{{ request.args.get('start_date', '') }}">
-            </div>
-            <div class="col-auto">
-                <label for="end_date" class="form-label">To:</label>
-                <input type="date" name="end_date" id="end_date" class="form-control"
-                    value="{{ request.args.get('end_date', '') }}">
-            </div>
-            <div class="col-auto">
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </div>
-        </form>
-    </section>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
 
-    <!-- Chart 1: Tickets by Category -->
-    <section aria-labelledby="category-chart-heading" class="mb-5">
-        <h3 id="category-chart-heading">Tickets by Category</h3>
-        <p class="text-muted">Bar chart showing total tickets grouped by category.</p>
-        <canvas id="categoryChart" width="400" height="200" role="img"
-            aria-label="Tickets by Category Bar Chart"></canvas>
-    </section>
+            <!-- Login Form -->
+            <form method="POST" action="{{ url_for('login') }}" aria-label="Login Form">
+                {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
 
-    <!-- Chart 2: Tickets by Admin by Status -->
-    <section aria-labelledby="admin-status-chart-heading" class="mb-5">
-        <h3 id="admin-status-chart-heading">Tickets per Admin (by Status)</h3>
-        <p class="text-muted">Stacked bar chart showing open tickets handled by each admin grouped by status.</p>
-        <canvas id="adminChart" width="400" height="200" role="img"
-            aria-label="Open Tickets by Admin, stacked by status"></canvas>
-    </section>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
 
-    <!-- Chart 3: Completed Tickets -->
-    <section aria-labelledby="done-chart-heading" class="mb-5">
-        <h3 id="done-chart-heading">Completed Tickets per Admin</h3>
-        <p class="text-muted">Filtered by date range selected above.</p>
-        <canvas id="doneChart" width="400" height="200" role="img"
-            aria-label="Completed Tickets per Admin Bar Chart"></canvas>
-    </section>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Log In</button>
+            </form>
+        </div>
+    </div>
 </section>
 
-<!-- Chart.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<!-- JS for Charts -->
-<script>
-    const ctx = document.getElementById('categoryChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: {{ categories | tojson }},
-        datasets: [{
-            label: 'Tickets by Category',
-            data: {{ counts | tojson }},
-        backgroundColor: ['#0d6efd', '#20c997', '#ffc107', '#dc3545', '#6610f2', '#198754'],
-        borderColor: '#dee2e6',
-        borderWidth: 1
-            }]
-        },
-        options: {
-        animation: { duration: 1200, easing: 'easeOutBounce' },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: { stepSize: 1 },
-                title: { display: true, text: 'Number of Tickets' }
-            },
-            x: {
-                title: { display: true, text: 'Category' }
-            }
-        }
-    }
-    });
-
-    const adminCtx = document.getElementById('adminChart').getContext('2d');
-    new Chart(adminCtx, {
-        type: 'bar',
-        data: {
-            labels: {{ admin_labels | tojson }},
-        datasets: [
-        {
-            label: 'Submitted',
-            data: {{ dataset_dict['Submitted'] | tojson }},
-        backgroundColor: '#6c757d'
-                },
-        {
-            label: 'In Progress',
-            data: {{ dataset_dict['In Progress'] | tojson }},
-        backgroundColor: '#0dcaf0'
-                },
-        {
-            label: 'On Hold',
-            data: {{ dataset_dict['On Hold'] | tojson }},
-        backgroundColor: '#ffc107'
-                }
-    ]
-        },
-        options: {
-        responsive: true,
-        animation: { duration: 1200, easing: 'easeOutBounce' },
-        plugins: {
-            title: { display: true, text: 'Open Tickets by Admin' }
-        },
-        scales: {
-            x: {
-                stacked: true,
-                title: { display: true, text: 'Admin' }
-            },
-            y: {
-                stacked: true,
-                beginAtZero: true,
-                ticks: { stepSize: 1 },
-                title: { display: true, text: 'Number of Tickets' }
-            }
-        }
-    }
-    });
-
-    const doneCtx = document.getElementById('doneChart').getContext('2d');
-    new Chart(doneCtx, {
-        type: 'bar',
-        data: {
-            labels: {{ done_labels | tojson }},
-        datasets: [{
-            label: 'Done Tickets',
-            data: {{ done_counts | tojson }},
-        backgroundColor: '#198754'
-            }]
-        },
-        options: {
-        responsive: true,
-        animation: { duration: 1200, easing: 'easeOutBounce' },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: { stepSize: 1 },
-                title: { display: true, text: 'Number of Done Tickets' }
-            },
-            x: {
-                title: { display: true, text: 'Admin' }
-            }
-        }
-    }
-    });
-</script>
+<!-- Illustration Section -->
+<section class="d-flex justify-content-center mt-5" aria-labelledby="illustration-caption">
+    <h2 id="illustration-caption" class="visually-hidden">Login Illustration</h2>
+    <img src="{{ url_for('static', filename='images/login-illustration.png') }}"
+        alt="Visual representation of secure login" class="img-fluid" style="max-width: 500px;">
+</section>
 {% endblock %}
