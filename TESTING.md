@@ -55,7 +55,7 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 ![Edit Ticket Test - PASS](static/images/editTicket1.png)
 ![Forgot Password Test - PASS](static/images/passwordReset.png)
 ![Login Test - PASS](static/images/login1.png)
-![Register Test - PASS](static/images/register.png)
+![Register Test - PASS](static/images/register1.png)
 ![Submit Ticket Test - PASS](static/images/submitTicket1.png)
 ![Ticket Test - PASS](static/images/tickets1.png)
 
