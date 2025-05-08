@@ -4,10 +4,12 @@
 
 {% block content %}
 <section aria-labelledby="login-heading">
+    <h2 id="login-heading" class="visually-hidden">Login Section</h2>
+
     <section class="row justify-content-center">
         <div class="col-md-6 col-lg-5">
             <header class="text-center mb-4">
-                <h2 id="login-heading">Login to Craig Austin Support</h2>
+                <h2>Login to Craig Austin Support</h2>
             </header>
 
             <form method="POST" class="bg-light p-4 rounded shadow-sm" aria-label="Login Form">
@@ -32,13 +34,11 @@
         </div>
     </section>
 
-    <!-- Image Section -->
     <section class="d-flex justify-content-center mt-5" aria-labelledby="illustration-caption">
+        <h2 id="illustration-caption" class="visually-hidden">Illustration: Women Working on a Laptop</h2>
         <figure class="text-center">
             <img src="{{ url_for('static', filename='images/people-with-laptops.png') }}"
                 alt="Women working on a laptop" class="img-fluid rounded shadow">
-            <figcaption id="illustration-caption" class="visually-hidden">Illustration of women working on a laptop
-            </figcaption>
         </figure>
     </section>
 </section>
