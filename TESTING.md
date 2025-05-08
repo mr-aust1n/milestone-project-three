@@ -39,7 +39,7 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 ![Admin Tickets Test  - FAIL](static/images/adminTickets.png)
 ![Dashboard Test - FAIL](static/images/dashboard.png)
 ![Edit Ticket Test - FAIL](static/images/editTicket.png)
-![Forgot Password Test - FAIL](static/images/passwordReset.png.png)
+![Forgot Password Test - FAIL](static/images/passwordReset.png)
 ![Login Test - FAIL](static/images/login.png)
 ![Register Test - FAIL](static/images/register.png)
 ![Submit Ticket Test - FAIL](static/images/submitTicket.png)
@@ -50,14 +50,14 @@ This document outlines accessibility, manual testing, device/browser testing, kn
 
 ![Home Test - PASS](static/images/home1.png)
 ![About - PASS](static/images/about1.png)
-![Admin Tickets Test - PASS](static/images/adminTickets.png)
-![Dashboard Test - PASS](static/images/dashboard.png)
-![Edit Ticket Test - PASS](static/images/editTicket.png)
-![Forgot Password Test - PASS](static/images/passwordReset.png.png)
-![Login Test - PASS](static/images/login.png)
+![Admin Tickets Test - PASS](static/images/adminTickets1.png)
+![Dashboard Test - PASS](static/images/dashboard1.png)
+![Edit Ticket Test - PASS](static/images/editTicket1.png)
+![Forgot Password Test - PASS](static/images/passwordReset.png)
+![Login Test - PASS](static/images/login1.png)
 ![Register Test - PASS](static/images/register.png)
-![Submit Ticket Test - PASS](static/images/submitTicket.png)
-![Ticket Test - PASS](static/images/tickets.png)
+![Submit Ticket Test - PASS](static/images/submitTicket1.png)
+![Ticket Test - PASS](static/images/tickets1.png)
 
 ---
 
